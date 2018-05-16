@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 
 namespace MineNET.Utils.Config
 {
-    public abstract class YamlStaticConfig : IConfig
+    public abstract class YamlStaticConfig
     {
         public string filePath;
 
@@ -36,11 +36,7 @@ namespace MineNET.Utils.Config
             }
             catch
             {
-                Logger.Error("%server_exception_config");
-                Logger.Notice("%server_exception_config2", filePath);
-                throw new IOException(LangManager.GetString("server_exception_config")
-                    + Environment.NewLine
-                    + string.Format(LangManager.GetString("server_exception_config2"), filePath));
+                throw new Exception();//TODO: Add ErrorMessage
             }
         }
 
@@ -75,11 +71,7 @@ namespace MineNET.Utils.Config
             }
             catch
             {
-                Logger.Error("%server_exception_config");
-                Logger.Notice("%server_exception_config2", this.filePath);
-                throw new IOException(LangManager.GetString("server_exception_config")
-                    + Environment.NewLine
-                    + string.Format(LangManager.GetString("server_exception_config2"), this.filePath));
+
             }
         }
     }

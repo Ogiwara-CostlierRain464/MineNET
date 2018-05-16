@@ -8,7 +8,7 @@ using YamlDotNet.Serialization;
 
 namespace MineNET.Utils.Config
 {
-    public class YamlConfig : IConfig
+    public class YamlConfig
     {
         public static YamlConfig Load(string filePath)
         {
@@ -36,10 +36,7 @@ namespace MineNET.Utils.Config
             }
             catch (YamlException e)
             {
-                Logger.Error(e);
-                Logger.Error("%config_error");
-                Logger.Notice("%config_error2");
-                throw new ServerException();
+                throw e;
             }
         }
 

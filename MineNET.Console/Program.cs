@@ -11,14 +11,14 @@ namespace MineNET.Console
             {
                 server = new Server();
                 server.Start();
-                while (!server.IsShutdown())
+
+                while (server.Status == ServerStatus.Running)
                 {
                 }
             }
             catch (Exception e)
             {
-                server.ErrorStop(e);
-                server.Stop();
+                //TODO: Stop
             }
         }
     }
