@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using MineNET.Events.ServerEvents;
 using MineNET.IO;
@@ -57,6 +58,8 @@ namespace MineNET
             {
                 try
                 {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
                     this.Clock = new ConstantClockManager();
 
                     //InitConfig
@@ -72,11 +75,19 @@ namespace MineNET
 
                     if (this.NetworkSocket == null)
                     {
-                        IPEndPoint point = new IPEndPoint(IPAddress.Any, this.ServerProperty.ServerPort);
+                        int port = this.ServerProperty.ServerPort;
+                        OutLog.Info("%server.network.start", port);
+
+                        IPEndPoint point = new IPEndPoint(IPAddress.Any, port);
                         this.SetNetworkSocket(new UDPSocket(point));
                     }
                     this.Network = new NetworkManager();
+                    OutLog.Info("%server.network.start.done", sw.Elapsed.ToString(@"mm\:ss\.fff"));
 
+                    sw.Stop();
+
+                    OutLog.Info("%server.start.done");
+                    OutLog.Info("%server.start.done2", sw.Elapsed.ToString(@"mm\:ss\.fff"));
                     this.Status = ServerStatus.Running;
                     return true;
                 }

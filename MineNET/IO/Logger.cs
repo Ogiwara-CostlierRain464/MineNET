@@ -47,7 +47,7 @@ namespace MineNET.IO
                 }
                 str = string.Format(str, args);
 
-                this.Log(str);
+                this.Error(str);
             }
         }
 
@@ -80,7 +80,7 @@ namespace MineNET.IO
                 }
                 str = string.Format(str, args);
 
-                this.Log(str);
+                this.Fatal(str);
             }
         }
 
@@ -95,7 +95,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"[Info][{time}] {str}";
+                str = $"§f[Info][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Info);
             }
@@ -113,7 +113,7 @@ namespace MineNET.IO
                 }
                 str = string.Format(str, args);
 
-                this.Log(str);
+                this.Info(str);
             }
         }
 
@@ -179,7 +179,7 @@ namespace MineNET.IO
                 }
                 str = string.Format(str, args);
 
-                this.Log(str);
+                this.Notice(str);
             }
         }
 
@@ -212,7 +212,7 @@ namespace MineNET.IO
                 }
                 str = string.Format(str, args);
 
-                this.Log(str);
+                this.Warning(str);
             }
         }
 
