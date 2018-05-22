@@ -18,5 +18,11 @@ namespace MineNET.Network
         {
             this.client = new UdpClient(point);
         }
+
+        public void Dispose()
+        {
+            this.client.Close();
+            this.client = null;
+        }
     }
 }

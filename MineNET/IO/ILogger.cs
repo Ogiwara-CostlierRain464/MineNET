@@ -1,6 +1,8 @@
-﻿namespace MineNET.IO
+﻿using System;
+
+namespace MineNET.IO
 {
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
         InputInterface Input { get; }
         OutputInterface Output { get; }

@@ -1,6 +1,8 @@
-﻿namespace MineNET.IO
+﻿using System;
+
+namespace MineNET.IO
 {
-    public interface InputInterface
+    public interface InputInterface : IDisposable
     {
         void InputAction(string inputText);
     }

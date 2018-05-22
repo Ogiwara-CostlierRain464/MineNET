@@ -5,19 +5,24 @@ namespace MineNET.IO
 {
     public class Logger : ILogger
     {
+        #region Property & Field
         public ConcurrentQueue<LoggerData> LoggerQueue { get; } = new ConcurrentQueue<LoggerData>();
 
         public bool IsRunConsole { get; private set; }
 
         public InputInterface Input { get; }
         public OutputInterface Output { get; }
+        #endregion
 
+        #region Ctor
         public Logger()
         {
             this.Input = new Input();
             this.Output = new Output(this);
         }
+        #endregion
 
+        #region Output Method
         public void Error(object text)
         {
             string str = text.ToString();
@@ -215,7 +220,9 @@ namespace MineNET.IO
                 this.Warning(str);
             }
         }
+        #endregion
 
+        #region Add Oueue Method
         public void AddOueue(string text, LoggerLevel level)
         {
             LoggerData data = new LoggerData();
@@ -223,7 +230,9 @@ namespace MineNET.IO
             data.Text = text;
             this.LoggerQueue.Enqueue(data);
         }
+        #endregion
 
+        #region Time Method
         private string CreateTime()
         {
             return DateTime.Now.ToString("yyyy/M/d H:mm:ss");
@@ -233,5 +242,14 @@ namespace MineNET.IO
         {
             return DateTime.Now.ToString("yyyy-M-d");
         }
+        #endregion
+
+        #region Dispose Method
+        public void Dispose()
+        {
+            this.Input.Dispose();
+            this.Output.Dispose();
+        }
+        #endregion
     }
 }

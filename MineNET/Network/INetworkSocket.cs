@@ -1,8 +1,9 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace MineNET.Network
 {
-    public interface INetworkSocket
+    public interface INetworkSocket : IDisposable
     {
         UdpClient Socket { get; }
     }

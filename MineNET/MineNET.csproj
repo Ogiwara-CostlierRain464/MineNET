@@ -93,6 +93,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandData.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\CommandSender.cs" />
+    <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Commands\PlayerCommandData.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
     <Compile Include="Events\IO\InputActionEventArgs.cs" />
@@ -114,6 +122,7 @@
     <Compile Include="Network\NetworkManager.cs" />
     <Compile Include="Network\UDPSocket.cs" />
     <Compile Include="OutLog.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerConfig.cs" />
@@ -129,7 +138,7 @@
     <Compile Include="Utils\Config\Yaml\CommentTypeInspector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
+    <Folder Include="Commands\Defaults\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />

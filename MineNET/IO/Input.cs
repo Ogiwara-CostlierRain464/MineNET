@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MineNET.Events.IO;
+using System;
 using System.Threading;
-using MineNET.Events.IO;
 
 namespace MineNET.IO
 {
-    public sealed class Input : InputInterface, IDisposable
+    public sealed class Input : InputInterface
     {
         public Thread InputThread { get; private set; }
 
@@ -21,7 +21,7 @@ namespace MineNET.IO
         {
             try
             {
-                Console.Write("");
+                Console.Write(string.Empty);
             }
             catch
             {

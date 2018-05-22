@@ -51,14 +51,13 @@ namespace MineNET.Network
         }
         #endregion
 
+        #region Dispose Method
         public void Dispose()
         {
-            this.Client.Close();
-            this.Client = null;
-
             this.IsRunNetwork = false;
             this.ClockThread.Join();
             this.ClockThread = null;
         }
+        #endregion
     }
 }

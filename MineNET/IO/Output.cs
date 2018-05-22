@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MineNET.Events.IO;
+using System;
 using System.Threading;
-using MineNET.Events.IO;
 
 namespace MineNET.IO
 {
-    public class Output : OutputInterface, IDisposable
+    public class Output : OutputInterface
     {
         private Logger LoggerSystem { get; set; }
 

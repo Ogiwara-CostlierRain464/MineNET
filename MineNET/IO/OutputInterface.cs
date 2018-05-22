@@ -1,6 +1,8 @@
-﻿namespace MineNET.IO
+﻿using System;
+
+namespace MineNET.IO
 {
-    public interface OutputInterface
+    public interface OutputInterface : IDisposable
     {
         void OutputAction(string outputText);
     }

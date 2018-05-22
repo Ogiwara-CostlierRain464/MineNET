@@ -1,19 +1,21 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using MineNET.Events.ServerEvents;
+﻿using MineNET.Events.ServerEvents;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
+using System;
+using System.Diagnostics;
+using System.Net;
 
 namespace MineNET
 {
     public sealed class Server : IDisposable
     {
+        #region Static Method
+        public static string ExecutePath { get; } = Environment.CurrentDirectory;
+        #endregion
+
         #region Singleton Instance
         public static Server Instance { get; private set; }
-
-        public static string ExecutePath { get; } = Environment.CurrentDirectory;
         #endregion
 
         #region Property & Field
@@ -185,9 +187,14 @@ namespace MineNET
         }
         #endregion
 
+        #region Dispose Method
         public void Dispose()
         {
-
+            this.Clock.Dispose();
+            this.Logger.Dispose();
+            this.Network.Dispose();
+            this.NetworkSocket.Dispose();
         }
+        #endregion
     }
 }
