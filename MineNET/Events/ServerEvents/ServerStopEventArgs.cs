@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace MineNET.Events.ServerEvents
+﻿namespace MineNET.Events.ServerEvents
 {
-    public class ServerStopEventArgs : EventArgs
+    public class ServerStopEventArgs : ServerEventArgs
     {
-        public Server Server { get; }
         public bool IsValid { get; }
 
         public ServerStopEventArgs(Server server, bool isValid)

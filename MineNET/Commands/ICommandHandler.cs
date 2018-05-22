@@ -3,6 +3,5 @@
     public interface ICommandHandler
     {
         void OnCommandExecute(CommandData data);
-        void OnPlayerCommandExecute(CommandData data);
     }
 }

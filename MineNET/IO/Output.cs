@@ -1,4 +1,4 @@
-﻿using MineNET.Events.IO;
+﻿using MineNET.Events.IOEvents;
 using System;
 using System.Threading;
 
@@ -60,8 +60,9 @@ namespace MineNET.IO
                 LoggerData data = null;
                 if (this.LoggerSystem.LoggerQueue.TryDequeue(out data))
                 {
-                    this.OnAction(this, new OutputActionEventArgs(data.Text));
-                    this.OutputAction(data.Text);
+                    OutputActionEventArgs ev = new OutputActionEventArgs(data.Text);
+                    this.OnAction(this, ev);
+                    this.OutputAction(ev.OutputText);
                 }
             }
         }

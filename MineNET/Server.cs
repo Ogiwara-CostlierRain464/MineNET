@@ -1,4 +1,5 @@
-﻿using MineNET.Events.ServerEvents;
+﻿using MineNET.Commands;
+using MineNET.Events.ServerEvents;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
@@ -27,6 +28,7 @@ namespace MineNET
         public ServerConfig ServerProperty { get; private set; }
 
         public ILogger Logger { get; private set; }
+        public CommandManager Command { get; private set; }
 
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
@@ -68,10 +70,8 @@ namespace MineNET
                     this.Config = MineNETConfig.Load<MineNETConfig>($"{ExecutePath}\\MineNET.yml");
                     this.ServerProperty = ServerConfig.Load<ServerConfig>($"{ExecutePath}\\ServerProperties.yml");
 
-                    if (this.Logger == null)
-                    {
-                        this.Logger = new Logger();
-                    }
+                    this.Logger = new Logger();
+                    this.Command = new CommandManager();
 
                     OutLog.Info("%server.start");
 
@@ -117,6 +117,7 @@ namespace MineNET
             {
                 try
                 {
+                    this.Dispose();
                     this.Status = ServerStatus.Stop;
                     return true;
                 }
@@ -192,6 +193,7 @@ namespace MineNET
         {
             this.Clock.Dispose();
             this.Logger.Dispose();
+            this.Command.Dispose();
             this.Network.Dispose();
             this.NetworkSocket.Dispose();
         }

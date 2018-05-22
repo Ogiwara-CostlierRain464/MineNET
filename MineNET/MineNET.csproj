@@ -98,15 +98,22 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\CommandManager.cs" />
     <Compile Include="Commands\CommandSender.cs" />
+    <Compile Include="Commands\ConsoleCommandSender.cs" />
+    <Compile Include="Commands\Defaults\StopCommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
-    <Compile Include="Commands\PlayerCommandData.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
-    <Compile Include="Events\IO\InputActionEventArgs.cs" />
-    <Compile Include="Events\IO\OutputActionEventArgs.cs" />
+    <Compile Include="Events\IOEvents\InputActionEventArgs.cs" />
+    <Compile Include="Events\IOEvents\IOEventArgs.cs" />
+    <Compile Include="Events\IOEvents\OutputActionEventArgs.cs" />
+    <Compile Include="Events\PlayerEvents\PlayerCommandEventArgs.cs" />
+    <Compile Include="Events\PlayerEvents\PlayerEventArgs.cs" />
+    <Compile Include="Events\ServerEvents\ServerCommandEventArgs.cs" />
+    <Compile Include="Events\ServerEvents\ServerEventArgs.cs" />
     <Compile Include="Events\ServerEvents\ServerStartEventArgs.cs" />
     <Compile Include="Events\ServerEvents\ServerStopEventArgs.cs" />
+    <Compile Include="ICloneable.cs" />
     <Compile Include="IO\ILogger.cs" />
     <Compile Include="IO\Input.cs" />
     <Compile Include="IO\InputInterface.cs" />
@@ -127,6 +134,8 @@
     <Compile Include="Server.cs" />
     <Compile Include="ServerConfig.cs" />
     <Compile Include="ServerStatus.cs" />
+    <Compile Include="TranslationMessage.cs" />
+    <Compile Include="Utils\ColorText.cs" />
     <Compile Include="Utils\Config\JsonConfig.cs" />
     <Compile Include="Utils\Config\JsonStaticConfig.cs" />
     <Compile Include="Utils\Config\YamlConfig.cs" />
@@ -137,9 +146,7 @@
     <Compile Include="Utils\Config\Yaml\CommentPropertyDescriptor.cs" />
     <Compile Include="Utils\Config\Yaml\CommentTypeInspector.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\Defaults\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />
   </ItemGroup>

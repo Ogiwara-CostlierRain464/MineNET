@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace MineNET.Events.IO
+﻿namespace MineNET.Events.IOEvents
 {
-    public class OutputActionEventArgs : EventArgs
+    public class OutputActionEventArgs : IOEventArgs
     {
         public string OutputText { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using MineNET.Events.IO;
+﻿using MineNET.Commands;
+using MineNET.Events.IOEvents;
 using System;
 using System.Threading;
 
@@ -36,7 +37,9 @@ namespace MineNET.IO
 
         public void InputAction(string inputText)
         {
-
+            CommandData data = new CommandData(new ConsoleCommandSender());
+            data.Text = inputText;
+            Server.Instance.Command.CommandHandler.OnCommandExecute(data);
         }
 
         public void Dispose()
@@ -52,8 +55,12 @@ namespace MineNET.IO
             while (this.IsRunning)
             {
                 string inputText = Console.ReadLine();
-                this.OnAction(this, new InputActionEventArgs(inputText));
-                this.InputAction(inputText);
+                if (!string.IsNullOrWhiteSpace(inputText))
+                {
+                    InputActionEventArgs ev = new InputActionEventArgs(inputText);
+                    this.OnAction(this, ev);
+                    this.InputAction(ev.InputText);
+                }
             }
         }
     }

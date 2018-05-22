@@ -15,6 +15,8 @@ namespace MineNET.Console
                 while (server.Status == ServerStatus.Running)
                 {
                 }
+
+                System.Console.WriteLine("Stop");
             }
             catch (Exception e)
             {
