@@ -118,6 +118,7 @@ namespace MineNET
             {
                 try
                 {
+                    OutLog.Info("%server.stoping");
                     this.Dispose();
                     this.Status = ServerStatus.Stop;
                     return true;
@@ -134,25 +135,24 @@ namespace MineNET
             }
         }
 
-        public bool ForceStop()
+        public bool ErrorStop(Exception e)
         {
             if (this.Status == ServerStatus.Running)
             {
-                bool result = true;
                 try
                 {
-
+                    OutLog.Fatal("%server.error.stop");
+                    OutLog.Error(e.ToString());
+                    OutLog.Info("%server.stoping");
+                    this.Dispose();
+                    this.Status = ServerStatus.Stop;
+                    return true;
                 }
                 catch
                 {
-                    result = false;
+                    this.Status = ServerStatus.Error;
+                    return false;
                 }
-                finally
-                {
-                    this.Status = ServerStatus.Stop;
-                }
-
-                return result;
             }
             else
             {
@@ -194,15 +194,17 @@ namespace MineNET
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            OutLog.Info("%server.stoping");
-            this.Clock.Dispose();
-            this.Command.Dispose();
-            this.Network.Dispose();
+
+            this.Clock?.Dispose();
+            this.Command?.Dispose();
+            this.Network?.Dispose();
             OutLog.Info("%server.network.stop", sw.Elapsed.ToString(@"mm\:ss\.fff"));
-            this.NetworkSocket.Dispose();
+            this.NetworkSocket?.Dispose();
             sw.Stop();
             OutLog.Info("%server.stoped", sw.Elapsed.ToString(@"mm\:ss\.fff"));
-            this.Logger.Dispose();
+            this.Logger?.Dispose();
+
+            Server.Instance = null;
         }
         #endregion
     }

@@ -18,7 +18,7 @@ namespace MineNET.Console
             }
             catch (Exception e)
             {
-                //TODO: Stop
+                server.ErrorStop(e);
             }
         }
     }

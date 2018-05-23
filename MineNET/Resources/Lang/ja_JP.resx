@@ -129,6 +129,9 @@
   <data name="server.config.serverMotd" xml:space="preserve">
     <value>サーバーの説明</value>
   </data>
+  <data name="server.error.stop" xml:space="preserve">
+    <value>リカバリー不可能なエラーが発生しました。</value>
+  </data>
   <data name="server.name" xml:space="preserve">
     <value>MineNET</value>
   </data>
