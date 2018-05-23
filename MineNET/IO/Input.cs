@@ -46,7 +46,6 @@ namespace MineNET.IO
         {
             this.IsRunning = false;
 
-            this.InputThread?.Join();
             this.InputThread = null;
         }
 

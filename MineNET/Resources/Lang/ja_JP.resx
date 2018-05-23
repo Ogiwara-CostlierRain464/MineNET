@@ -136,7 +136,10 @@
     <value>ポート番号 {0} でネットワークリスナーを開始しています。</value>
   </data>
   <data name="server.network.start.done" xml:space="preserve">
-    <value>ネットワークリスナーを開始しました。 経過時間: {0}</value>
+    <value>ネットワークリスナーを開始しました。 起動経過時間: {0}</value>
+  </data>
+  <data name="server.network.stop" xml:space="preserve">
+    <value>ネットワークリスナーを終了しました。 終了経過時間: {0}</value>
   </data>
   <data name="server.start" xml:space="preserve">
     <value>MineNET サーバーを開始しています。</value>
@@ -145,6 +148,12 @@
     <value>サーバーが開始しました。</value>
   </data>
   <data name="server.start.done2" xml:space="preserve">
-    <value>helpでコマンド確認して下さい。 起動時間: {0}</value>
+    <value>helpでコマンド確認して下さい。 起動経過時間: {0}</value>
+  </data>
+  <data name="server.stoped" xml:space="preserve">
+    <value>サーバーは終了しました。 終了経過時間: {0}</value>
+  </data>
+  <data name="server.stoping" xml:space="preserve">
+    <value>サーバーを終了しています。</value>
   </data>
 </root>

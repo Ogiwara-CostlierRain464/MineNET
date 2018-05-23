@@ -91,6 +91,7 @@ namespace MineNET
                     OutLog.Info("%server.start.done");
                     OutLog.Info("%server.start.done2", sw.Elapsed.ToString(@"mm\:ss\.fff"));
                     this.Status = ServerStatus.Running;
+
                     return true;
                 }
                 catch (Exception e)
@@ -191,11 +192,17 @@ namespace MineNET
         #region Dispose Method
         public void Dispose()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            OutLog.Info("%server.stoping");
             this.Clock.Dispose();
-            this.Logger.Dispose();
             this.Command.Dispose();
             this.Network.Dispose();
+            OutLog.Info("%server.network.stop", sw.Elapsed.ToString(@"mm\:ss\.fff"));
             this.NetworkSocket.Dispose();
+            sw.Stop();
+            OutLog.Info("%server.stoped", sw.Elapsed.ToString(@"mm\:ss\.fff"));
+            this.Logger.Dispose();
         }
         #endregion
     }
