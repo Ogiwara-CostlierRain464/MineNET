@@ -77,11 +77,13 @@ namespace MineNET.Network
 
                     OfflinePong pong = new OfflinePong();
                     pong.Ping = ping.Ping;
-                    pong.ServerID = 5493;
-                    pong.ServerName = $"MCPE;Test;261;1.4.2;0;20;MineNET;Survival";
+                    pong.ServerID = 8452168;
+                    pong.ServerName = "MCPE;Test;261;1.4.2;0;20;MineNET;Survival";
 
                     this.Send(endPoint, pong);
                 }
+
+                OutLog.Info("?");
             }
         }
         #endregion
