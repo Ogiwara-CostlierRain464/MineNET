@@ -13,12 +13,6 @@ namespace MineNET.IO
         public bool IsRunning { get; private set; }
         public bool UsingGUI { get; private set; }
 
-        public event EventHandler<OutputActionEventArgs> Action;
-        private void OnAction(object sender, OutputActionEventArgs e)
-        {
-            this.Action?.Invoke(sender, e);
-        }
-
         public Output(Logger logger)
         {
             this.LoggerSystem = logger;
@@ -61,7 +55,7 @@ namespace MineNET.IO
                 if (this.LoggerSystem.LoggerQueue.TryDequeue(out data))
                 {
                     OutputActionEventArgs ev = new OutputActionEventArgs(data.Text);
-                    this.OnAction(this, ev);
+                    Server.Instance.Event.IO.OnOutputAction(this, ev);
                     this.OutputAction(ev.OutputText);
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using MineNET.Commands;
+using MineNET.Events;
 using MineNET.Events.ServerEvents;
 using MineNET.IO;
 using MineNET.Manager;
@@ -24,6 +25,8 @@ namespace MineNET
 
         public ConstantClockManager Clock { get; private set; }
 
+        public EventManager Event { get; set; }
+
         public MineNETConfig Config { get; private set; }
         public ServerConfig ServerProperty { get; private set; }
 
@@ -32,20 +35,6 @@ namespace MineNET
 
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
-        #endregion
-
-        #region Event
-        public event EventHandler<ServerStartEventArgs> ServerStart;
-        private void OnServerStart(object sender, ServerStartEventArgs e)
-        {
-            this.ServerStart?.Invoke(sender, e);
-        }
-
-        public event EventHandler<ServerStopEventArgs> ServerStop;
-        private void OnServerStop(object sender, ServerStopEventArgs e)
-        {
-            this.ServerStop?.Invoke(sender, e);
-        }
         #endregion
 
         #region Ctor
@@ -65,6 +54,9 @@ namespace MineNET
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
                     this.Clock = new ConstantClockManager();
+
+                    this.Event = new EventManager();
+                    this.Event.Server.OnServerStart(this, new ServerStartEventArgs());
 
                     //InitConfig
                     this.Config = MineNETConfig.Load<MineNETConfig>($"{ExecutePath}\\MineNET.yml");
@@ -92,6 +84,7 @@ namespace MineNET
                     OutLog.Info("%server.start.done2", sw.Elapsed.ToString(@"mm\:ss\.fff"));
                     this.Status = ServerStatus.Running;
 
+                    //TODO ServerStartedEvent...
                     return true;
                 }
                 catch (Exception e)
@@ -118,9 +111,12 @@ namespace MineNET
             {
                 try
                 {
+                    this.Event.Server.OnServerStop(this, new ServerStopEventArgs());
                     OutLog.Info("%server.stoping");
                     this.Dispose();
                     this.Status = ServerStatus.Stop;
+
+                    //TODO ServerStopedEvent...
                     return true;
                 }
                 catch
@@ -139,20 +135,15 @@ namespace MineNET
         {
             if (this.Status == ServerStatus.Running)
             {
-                try
-                {
-                    OutLog.Fatal("%server.error.stop");
-                    OutLog.Error(e.ToString());
-                    OutLog.Info("%server.stoping");
-                    this.Dispose();
-                    this.Status = ServerStatus.Stop;
-                    return true;
-                }
-                catch
-                {
-                    this.Status = ServerStatus.Error;
-                    return false;
-                }
+                //TODO ServerErrorStopEvent...
+                OutLog.Fatal("%server.error.stop");
+                OutLog.Error(e.ToString());
+                OutLog.Info("%server.stoping");
+                this.Dispose();
+                this.Status = ServerStatus.Stop;
+
+                //TODO ServerErrorStopedEvent...
+                return true;
             }
             else
             {

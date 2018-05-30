@@ -1,6 +1,5 @@
 ﻿using MineNET.Events.PlayerEvents;
 using MineNET.Events.ServerEvents;
-using System;
 
 namespace MineNET.Commands
 {
@@ -8,16 +7,6 @@ namespace MineNET.Commands
     {
         private CommandManager Manager { get; }
 
-        public event EventHandler<ServerCommandEventArgs> ServerCommand;
-        public void OnServerCommand(object sender, ServerCommandEventArgs e)
-        {
-            this.ServerCommand?.Invoke(sender, e);
-        }
-        public event EventHandler<PlayerCommandEventArgs> PlayerCommand;
-        public void OnPlayerCommand(object sender, PlayerCommandEventArgs e)
-        {
-            this.PlayerCommand?.Invoke(sender, e);
-        }
         public CommandHandler(CommandManager manager)
         {
             this.Manager = manager;
@@ -28,7 +17,7 @@ namespace MineNET.Commands
             if (data.Sender.IsPlayer)
             {
                 PlayerCommandEventArgs ev = new PlayerCommandEventArgs((Player) data.Sender, data.Text);
-                this.OnPlayerCommand(this, ev);
+                Server.Instance.Event.Player.OnPlayerCommand(this, ev);
                 if (ev.IsCancel)
                 {
                     return;
@@ -38,8 +27,8 @@ namespace MineNET.Commands
             }
             else
             {
-                ServerCommandEventArgs ev = new ServerCommandEventArgs(Server.Instance, data.Text);
-                this.OnServerCommand(this, ev);
+                ServerCommandEventArgs ev = new ServerCommandEventArgs(data.Text);
+                Server.Instance.Event.Server.OnServerCommand(this, ev);
                 if (ev.IsCancel)
                 {
                     return;

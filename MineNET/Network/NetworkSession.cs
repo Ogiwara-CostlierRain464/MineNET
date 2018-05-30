@@ -1,6 +1,6 @@
 ﻿namespace MineNET.Network
 {
-    public class NetworkSession : INetworkSession
+    public class NetworkSession
     {
     }
 }

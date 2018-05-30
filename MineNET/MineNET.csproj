@@ -105,11 +105,14 @@
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
     <Compile Include="Events\IOEvents\InputActionEventArgs.cs" />
+    <Compile Include="Events\IOEvents\IOEvent.cs" />
     <Compile Include="Events\IOEvents\IOEventArgs.cs" />
     <Compile Include="Events\IOEvents\OutputActionEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCommandEventArgs.cs" />
+    <Compile Include="Events\PlayerEvents\PlayerEvent.cs" />
     <Compile Include="Events\PlayerEvents\PlayerEventArgs.cs" />
     <Compile Include="Events\ServerEvents\ServerCommandEventArgs.cs" />
+    <Compile Include="Events\ServerEvents\ServerEvent.cs" />
     <Compile Include="Events\ServerEvents\ServerEventArgs.cs" />
     <Compile Include="Events\ServerEvents\ServerStartEventArgs.cs" />
     <Compile Include="Events\ServerEvents\ServerStopEventArgs.cs" />
@@ -125,7 +128,6 @@
     <Compile Include="LanguageService.cs" />
     <Compile Include="Manager\ConstantClockManager.cs" />
     <Compile Include="MineNETConfig.cs" />
-    <Compile Include="Network\INetworkSession.cs" />
     <Compile Include="Network\INetworkSocket.cs" />
     <Compile Include="Network\NetworkManager.cs" />
     <Compile Include="Network\NetworkSession.cs" />

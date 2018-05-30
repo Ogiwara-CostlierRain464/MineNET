@@ -12,12 +12,6 @@ namespace MineNET.IO
         public bool IsRunning { get; private set; }
         public bool UsingGUI { get; private set; }
 
-        public event EventHandler<InputActionEventArgs> Action;
-        private void OnAction(object sender, InputActionEventArgs e)
-        {
-            this.Action?.Invoke(sender, e);
-        }
-
         public Input()
         {
             try
@@ -57,7 +51,7 @@ namespace MineNET.IO
                 if (!string.IsNullOrWhiteSpace(inputText))
                 {
                     InputActionEventArgs ev = new InputActionEventArgs(inputText);
-                    this.OnAction(this, ev);
+                    Server.Instance.Event.IO.OnInputAction(this, ev);
                     this.InputAction(ev.InputText);
                 }
             }

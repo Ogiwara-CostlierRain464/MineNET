@@ -2,12 +2,9 @@
 {
     public class ServerStartEventArgs : ServerEventArgs
     {
-        public bool IsValid { get; }
-
-        public ServerStartEventArgs(Server server, bool isValid)
+        public ServerStartEventArgs()
         {
-            this.Server = server;
-            this.IsValid = isValid;
+            this.Server = Server.Instance;
         }
     }
 }

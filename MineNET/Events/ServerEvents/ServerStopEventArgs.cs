@@ -2,12 +2,9 @@
 {
     public class ServerStopEventArgs : ServerEventArgs
     {
-        public bool IsValid { get; }
-
-        public ServerStopEventArgs(Server server, bool isValid)
+        public ServerStopEventArgs()
         {
-            this.Server = server;
-            this.IsValid = isValid;
+            this.Server = Server.Instance;
         }
     }
 }

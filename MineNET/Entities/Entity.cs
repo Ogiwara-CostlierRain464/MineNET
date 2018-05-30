@@ -1,12 +1,6 @@
-﻿using System;
-
-namespace MineNET.Entities
+﻿namespace MineNET.Entities
 {
-    public abstract class Entity : IDisposable
+    public abstract class Entity
     {
-        public virtual void Dispose()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -51,10 +51,13 @@ namespace MineNET.Network
         {
             try
             {
-                IPEndPoint point = null;
-                byte[] bytes = this.Client.Receive(ref point);
+                if (this.IsRunNetwork)
+                {
+                    IPEndPoint point = null;
+                    byte[] bytes = this.Client.Receive(ref point);
 
-                this.HandlePacket(point, bytes);
+                    this.HandlePacket(point, bytes);
+                }
             }
             catch (Exception e)
             {
@@ -82,8 +85,6 @@ namespace MineNET.Network
 
                     this.Send(endPoint, pong);
                 }
-
-                OutLog.Info("?");
             }
         }
         #endregion
@@ -101,7 +102,7 @@ namespace MineNET.Network
         public void Dispose()
         {
             this.IsRunNetwork = false;
-            this.ClockThread.Join();
+            this.ClockThread.Abort();
             this.ClockThread = null;
         }
         #endregion
