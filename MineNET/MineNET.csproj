@@ -125,8 +125,15 @@
     <Compile Include="LanguageService.cs" />
     <Compile Include="Manager\ConstantClockManager.cs" />
     <Compile Include="MineNETConfig.cs" />
+    <Compile Include="Network\INetworkSession.cs" />
     <Compile Include="Network\INetworkSocket.cs" />
     <Compile Include="Network\NetworkManager.cs" />
+    <Compile Include="Network\NetworkSession.cs" />
+    <Compile Include="Network\RakNetPackets\OfflineMessage.cs" />
+    <Compile Include="Network\RakNetPackets\OfflinePing.cs" />
+    <Compile Include="Network\RakNetPackets\OfflinePong.cs" />
+    <Compile Include="Network\RakNetPackets\RakNetConstant.cs" />
+    <Compile Include="Network\RakNetPackets\RakNetPacket.cs" />
     <Compile Include="Network\UDPSocket.cs" />
     <Compile Include="OutLog.cs" />
     <Compile Include="Player.cs" />
@@ -135,6 +142,8 @@
     <Compile Include="ServerConfig.cs" />
     <Compile Include="ServerStatus.cs" />
     <Compile Include="TranslationMessage.cs" />
+    <Compile Include="Utils\Binary.cs" />
+    <Compile Include="Utils\BinaryStream.cs" />
     <Compile Include="Utils\ColorText.cs" />
     <Compile Include="Utils\Config\JsonConfig.cs" />
     <Compile Include="Utils\Config\JsonStaticConfig.cs" />
@@ -145,8 +154,12 @@
     <Compile Include="Utils\Config\Yaml\CommentObjectGraphVisitor.cs" />
     <Compile Include="Utils\Config\Yaml\CommentPropertyDescriptor.cs" />
     <Compile Include="Utils\Config\Yaml\CommentTypeInspector.cs" />
+    <Compile Include="Utils\MemorySpan.cs" />
+    <Compile Include="Utils\VarInt.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Network\Packets\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />
   </ItemGroup>
