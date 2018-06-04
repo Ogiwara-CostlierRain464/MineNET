@@ -6,6 +6,8 @@ namespace MineNET.Network
 {
     public sealed class UDPSocket : INetworkSocket
     {
+        public IPEndPoint EndPoint { get; }
+
         private UdpClient client;
         public UdpClient Socket
         {
@@ -17,9 +19,10 @@ namespace MineNET.Network
 
         public UDPSocket(IPEndPoint point)
         {
-            this.client = new UdpClient(point);
+            this.EndPoint = point;
+            this.client = new UdpClient(this.EndPoint);
 
-            /*this.client.Client.ReceiveBufferSize = int.MaxValue;
+            this.client.Client.ReceiveBufferSize = int.MaxValue;
             this.client.Client.SendBufferSize = int.MaxValue;
             this.client.DontFragment = false;
             this.client.EnableBroadcast = false;
@@ -28,7 +31,7 @@ namespace MineNET.Network
             uint IOC_VENDOR = 0x18000000;
             uint SIO_UDP_CONNRESET = IOC_IN | IOC_VENDOR | 12;
 
-            this.client.Client.IOControl((int) SIO_UDP_CONNRESET, new byte[] { Convert.ToByte(false) }, null);*/
+            this.client.Client.IOControl((int) SIO_UDP_CONNRESET, new byte[] { Convert.ToByte(false) }, null);
         }
 
         public void Dispose()

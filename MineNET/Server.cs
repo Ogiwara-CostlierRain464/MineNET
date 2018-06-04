@@ -7,6 +7,7 @@ using MineNET.Network;
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Threading;
 
 namespace MineNET
 {
@@ -53,6 +54,9 @@ namespace MineNET
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
+
+                    Thread.CurrentThread.Name = "ServerLaunchThread";
+
                     this.Clock = new ConstantClockManager();
 
                     this.Event = new EventManager();

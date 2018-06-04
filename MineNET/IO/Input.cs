@@ -26,6 +26,7 @@ namespace MineNET.IO
             this.IsRunning = true;
 
             this.InputThread = new Thread(this.OnUpdate);
+            this.InputThread.Name = "InputThread";
             this.InputThread.Start();
         }
 

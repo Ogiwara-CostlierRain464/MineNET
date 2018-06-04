@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace MineNET.IO
 {
@@ -34,7 +35,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§c[Error][{time}] {str}";
+                str = $"§c[{this.GetInvokeThread()}/Error][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Error);
             }
@@ -67,7 +68,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§4[Fatal][{time}] {str}";
+                str = $"§4[{this.GetInvokeThread()}/Fatal][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Fatal);
             }
@@ -100,7 +101,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§f[Info][{time}] {str}";
+                str = $"§f[{this.GetInvokeThread()}/Info][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Info);
             }
@@ -133,7 +134,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§7[Log][{time}] {str}";
+                str = $"§7[{this.GetInvokeThread()}/Log][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Log);
             }
@@ -166,7 +167,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§b[Notice][{time}] {str}";
+                str = $"§b[{this.GetInvokeThread()}/Notice][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Notice);
             }
@@ -199,7 +200,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§e[Warning][{time}] {str}";
+                str = $"§e[{this.GetInvokeThread()}/Warning][{time}] {str}";
 
                 this.AddOueue(str, LoggerLevel.Warning);
             }
@@ -241,6 +242,13 @@ namespace MineNET.IO
         private string CreateDay()
         {
             return DateTime.Now.ToString("yyyy-M-d");
+        }
+        #endregion
+
+        #region Get Invoke Thread Method
+        private string GetInvokeThread()
+        {
+            return Thread.CurrentThread.Name;
         }
         #endregion
 

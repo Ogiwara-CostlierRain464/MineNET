@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MineNET.Utils.Config.Yaml;
+using System;
 using System.IO;
 using System.Text;
-using MineNET.Utils.Config.Yaml;
 using YamlDotNet.Serialization;
 
 namespace MineNET.Utils.Config
@@ -34,9 +34,9 @@ namespace MineNET.Utils.Config
                     return (T) conv;
                 }
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();//TODO: Add ErrorMessage
+                throw e;
             }
         }
 
@@ -69,9 +69,9 @@ namespace MineNET.Utils.Config
                     w.Close();
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                throw e;
             }
         }
     }

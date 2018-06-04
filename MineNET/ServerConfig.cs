@@ -7,9 +7,6 @@ namespace MineNET
         [YamlDescription("%server.config.serverMotd")]
         public string ServerMotd { get; set; } = "MineNETServer";
 
-        //[YamlDescription("%server.config.address")]
-        //public IPAddress ServerAddress { get; set; } = IPAddress.Any;
-
         [YamlDescription("%server.config.port")]
         public ushort ServerPort { get; set; } = 19132;
 

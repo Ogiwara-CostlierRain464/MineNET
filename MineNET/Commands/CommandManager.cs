@@ -1,6 +1,5 @@
 ﻿using MineNET.Commands.Defaults;
 using System;
-using System.Collections.Generic;
 
 namespace MineNET.Commands
 {
@@ -8,8 +7,6 @@ namespace MineNET.Commands
     {
         #region Property & Field
         public ICommandHandler CommandHandler { get; set; }
-        public Dictionary<string, Command> CommandList { get; private set; } = new Dictionary<string, Command>();
-        public Dictionary<string, Command> CommandAliases { get; private set; } = new Dictionary<string, Command>();
         #endregion
 
         #region Ctor
@@ -23,13 +20,9 @@ namespace MineNET.Commands
         #region Get Command Method
         public Command GetCommand(string cmd)
         {
-            if (this.CommandList.ContainsKey(cmd))
+            if (MineNET_Registries.Command.ContainsKey(cmd))
             {
-                return this.CommandList[cmd];
-            }
-            if (this.CommandAliases.ContainsKey(cmd))
-            {
-                return this.CommandAliases[cmd];
+                return MineNET_Registries.Command[cmd];
             }
             return null;
         }
@@ -52,9 +45,9 @@ namespace MineNET.Commands
         public bool RegisterCommand(Command cmd)
         {
             bool result = false;
-            if (!this.CommandList.ContainsKey(cmd.Name))
+            if (!MineNET_Registries.Command.ContainsKey(cmd.Name))
             {
-                this.CommandList.Add(cmd.Name, cmd);
+                MineNET_Registries.Command.Add(cmd.Name, cmd);
                 result = true;
             }
 
@@ -62,9 +55,9 @@ namespace MineNET.Commands
             {
                 for (int i = 0; i < cmd.Aliases.Length; ++i)
                 {
-                    if (!this.CommandAliases.ContainsKey(cmd.Aliases[i]))
+                    if (!MineNET_Registries.Command.ContainsKey(cmd.Aliases[i]))
                     {
-                        this.CommandAliases.Add(cmd.Aliases[i], cmd);
+                        MineNET_Registries.Command.Add(cmd.Aliases[i], cmd);
                     }
                 }
                 result = true;
@@ -75,9 +68,9 @@ namespace MineNET.Commands
 
         public bool UnRegisterCommand(string cmdName)
         {
-            if (this.CommandList.ContainsKey(cmdName))
+            if (MineNET_Registries.Command.ContainsKey(cmdName))
             {
-                this.CommandList.Remove(cmdName);
+                MineNET_Registries.Command.Remove(cmdName);
                 return true;
             }
             else
@@ -94,9 +87,9 @@ namespace MineNET.Commands
             {
                 for (int i = 0; i < cmd.Aliases.Length; ++i)
                 {
-                    if (!this.CommandAliases.ContainsKey(cmd.Aliases[i]))
+                    if (!MineNET_Registries.Command.ContainsKey(cmd.Aliases[i]))
                     {
-                        this.CommandAliases.Remove(cmd.Aliases[i]);
+                        MineNET_Registries.Command.Remove(cmd.Aliases[i]);
                     }
                 }
                 result = true;
@@ -116,8 +109,7 @@ namespace MineNET.Commands
         #region Dispose Method
         public void Dispose()
         {
-            this.CommandList.Clear();
-            this.CommandAliases = null;
+            this.CommandHandler = null;
         }
         #endregion
     }

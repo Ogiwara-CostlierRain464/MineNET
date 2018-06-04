@@ -3,7 +3,6 @@
     public static class RakNetConstant
     {
         public static readonly byte[] Magic = new byte[]
-
         {
 
             0x00,
@@ -41,6 +40,10 @@
         };
 
         public const byte OfflinePing = 0x01;
+        public const byte OpenConnectingRequest1 = 0x05;
+        public const byte OpenConnectingReply1 = 0x06;
+        public const byte OpenConnectingRequest2 = 0x07;
+        public const byte OpenConnectingReply2 = 0x08;
         public const byte OfflinePong = 0x1c;
     }
 }

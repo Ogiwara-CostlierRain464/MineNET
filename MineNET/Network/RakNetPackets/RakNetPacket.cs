@@ -2,7 +2,7 @@
 
 namespace MineNET.Network.RakNetPackets
 {
-    public abstract class RakNetPacket : BinaryStream
+    public abstract class RakNetPacket : BinaryStream, ICloneable<RakNetPacket>
     {
         public abstract byte MessageID { get; protected set; }
 
@@ -13,6 +13,11 @@ namespace MineNET.Network.RakNetPackets
         public virtual void Decode()
         {
             this.ReadByte();
+        }
+
+        public new RakNetPacket Clone()
+        {
+            return (RakNetPacket) this.MemberwiseClone();
         }
     }
 }
