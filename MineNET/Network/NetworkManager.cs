@@ -111,6 +111,12 @@ namespace MineNET.Network
                         OutLog.Log("%server.network.raknet.sessionNotCreated", endPoint);
                         return;
                     }
+
+                    if (pk is DataPacket)
+                    {
+                        NetworkSession session = this.GetSession(endPoint);
+                        session.HandleDataPacket((DataPacket) pk);
+                    }
                 }
 
                 OutLog.Log("%server.network.raknet.notHandle", msgId);
@@ -174,6 +180,17 @@ namespace MineNET.Network
             }
 
             return false;
+        }
+
+        public NetworkSession GetSession(IPEndPoint endPoint)
+        {
+            string endPointStr = endPoint.ToString();
+            if (this.Sessions.ContainsKey(endPointStr))
+            {
+                return this.Sessions[endPointStr];
+            }
+
+            return null;
         }
         #endregion
 

@@ -102,10 +102,14 @@
     <Compile Include="Commands\Defaults\StopCommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Network\RakNetPackets\DataPacket.cs" />
+    <Compile Include="Network\RakNetPackets\EncapsulatedPacket.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingReply1.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingReply2.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest1.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest2.cs" />
+    <Compile Include="Network\RakNetReliability.cs" />
+    <Compile Include="Network\SessionState.cs" />
     <Compile Include="Registry\EntityRegistry.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
