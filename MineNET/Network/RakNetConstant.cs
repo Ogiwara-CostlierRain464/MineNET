@@ -48,6 +48,12 @@
         public const byte OpenConnectingReply1 = 0x06;
         public const byte OpenConnectingRequest2 = 0x07;
         public const byte OpenConnectingReply2 = 0x08;
+        public const byte ClientConnectDataPacket = 0x09;
+        public const byte ServerHandShakeDataPacket = 0x10;
+
+        public const byte ClientHandShakeDataPacket = 0x13;
+
+        public const byte ClientDisconnectDataPacket = 0x15;
 
         public const byte OfflinePong = 0x1c;
 

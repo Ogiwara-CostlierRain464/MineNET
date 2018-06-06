@@ -1,5 +1,6 @@
 ﻿using MineNET.Network.RakNetPackets;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -13,12 +14,13 @@ namespace MineNET.Network
         public UdpClient Client { get; private set; }
 
         public Thread ReceiveThread { get; private set; }
+        public Thread UpdateThread { get; private set; }
 
         public bool IsRunNetwork { get; private set; }
 
         public long ServerID { get; } = MineNET.Utils.Random.CreateRandomID();
 
-        public Dictionary<string, NetworkSession> Sessions { get; } = new Dictionary<string, NetworkSession>();
+        public ConcurrentDictionary<string, NetworkSession> Sessions { get; } = new ConcurrentDictionary<string, NetworkSession>();
         #endregion
 
         #region Ctor
@@ -43,16 +45,39 @@ namespace MineNET.Network
             this.ReceiveThread = new Thread(this.ReceiveClock);
             this.ReceiveThread.Name = "PacketThread";
             this.ReceiveThread.Start();
+
+            this.UpdateThread = new Thread(this.OnUpdate);
+            this.UpdateThread.Name = "SessionUpdateThread";
+            this.UpdateThread.Start();
         }
 
         private void RegisterPackets()
         {
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OfflinePing, new OfflinePing());
-            MineNET_Registries.RakNetPacket.Add(RakNetConstant.OfflinePong, new OfflinePong());
+
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingRequest1, new OpenConnectingRequest1());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingReply1, new OpenConnectingReply1());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingRequest2, new OpenConnectingRequest2());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingReply2, new OpenConnectingReply2());
+
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.OfflinePong, new OfflinePong());
+
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket0, new DataPacket0());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket1, new DataPacket1());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket2, new DataPacket2());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket3, new DataPacket3());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket4, new DataPacket4());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket5, new DataPacket5());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket6, new DataPacket6());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket7, new DataPacket7());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket8, new DataPacket8());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacket9, new DataPacket9());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketA, new DataPacketA());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketB, new DataPacketB());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketC, new DataPacketC());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketD, new DataPacketD());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketE, new DataPacketE());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketF, new DataPacketF());
         }
         #endregion
 
@@ -80,6 +105,18 @@ namespace MineNET.Network
             catch (Exception e)
             {
                 OutLog.Notice(e);
+            }
+        }
+
+        public void OnUpdate()
+        {
+            while (IsRunNetwork)
+            {
+                foreach (KeyValuePair<string, NetworkSession> session in this.Sessions)
+                {
+                    session.Value.OnUpdate();
+                }
+                Thread.Sleep(1);
             }
         }
         #endregion
@@ -116,6 +153,8 @@ namespace MineNET.Network
                     {
                         NetworkSession session = this.GetSession(endPoint);
                         session.HandleDataPacket((DataPacket) pk);
+                        pk.Dispose();
+                        return;
                     }
                 }
 
@@ -167,7 +206,7 @@ namespace MineNET.Network
         {
             if (!this.SessionCreated(endPoint))
             {
-                this.Sessions.Add(endPoint.ToString(), new NetworkSession(endPoint, clientID, mtuSize));
+                this.Sessions.TryAdd(endPoint.ToString(), new NetworkSession(endPoint, clientID, mtuSize));
                 OutLog.Info("%server.network.raknet.sessionCreate", endPoint, mtuSize);
             }
         }
@@ -191,6 +230,17 @@ namespace MineNET.Network
             }
 
             return null;
+        }
+
+        public void RemoveSession(IPEndPoint endPoint)
+        {
+            string endPointStr = endPoint.ToString();
+            if (this.Sessions.ContainsKey(endPointStr))
+            {
+                NetworkSession session;
+                this.Sessions[endPointStr].Close();
+                this.Sessions.TryRemove(endPointStr, out session);
+            }
         }
         #endregion
 

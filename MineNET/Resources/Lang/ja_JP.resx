@@ -144,11 +144,17 @@
   <data name="server.network.raknet.notHandle" xml:space="preserve">
     <value>ハンドルされていないRakNetパケット {0} を受信しました。</value>
   </data>
+  <data name="server.network.raknet.sessionClose" xml:space="preserve">
+    <value>セッションが終了しました。&lt;{0}&gt;</value>
+  </data>
   <data name="server.network.raknet.sessionCreate" xml:space="preserve">
     <value>セッションが作成されました。 &lt;{0}&gt; mtuSize: {1}</value>
   </data>
   <data name="server.network.raknet.sessionCreated" xml:space="preserve">
     <value>{0} は既にセッションが作成されています。</value>
+  </data>
+  <data name="server.network.raknet.sessionDisconnect" xml:space="preserve">
+    <value>セッション &lt;{0}&gt; は {1} で終了しました。</value>
   </data>
   <data name="server.network.raknet.sessionNotCreated" xml:space="preserve">
     <value>{0} はセッションが作成されていません。</value>
