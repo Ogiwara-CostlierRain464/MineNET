@@ -1,4 +1,6 @@
 ﻿using MineNET.Network.RakNetPackets;
+using MineNET.Utils;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
@@ -34,6 +36,12 @@ namespace MineNET.Network
 
         public int LastSeqNumber { get; private set; } = -1;
 
+        public int SplitID { get; private set; }
+        public int OrderIndex { get; private set; }
+
+        public DataPacket SendQueue = new DataPacket4();
+        public Dictionary<int, Dictionary<int, EncapsulatedPacket>> SplitPackets { get; set; } = new Dictionary<int, Dictionary<int, EncapsulatedPacket>>();
+
         public int ReliableWindowStart { get; private set; }
         public int ReliableWindowEnd { get; private set; }
         public ConcurrentDictionary<int, bool> ReliableWindow { get; private set; } = new ConcurrentDictionary<int, bool>();
@@ -67,12 +75,30 @@ namespace MineNET.Network
 
             if (this.ACKQueue.Count > 0)
             {
-                //ack
+                Ack pk = new Ack();
+                List<int> pks = new List<int>();
+                foreach (KeyValuePair<int, int> kv in this.ACKQueue.ToArray())
+                {
+                    pks.Add(kv.Value);
+                }
+                pk.Packets = pks.ToArray();
+                this.SendPacket(pk);
+
+                this.ACKQueue.Clear();
             }
 
             if (this.NACKQueue.Count > 0)
             {
-                //nack
+                Nack pk = new Nack();
+                List<int> pks = new List<int>();
+                foreach (KeyValuePair<int, int> kv in this.NACKQueue.ToArray())
+                {
+                    pks.Add(kv.Value);
+                }
+                pk.Packets = pks.ToArray();
+                this.SendPacket(pk);
+
+                this.NACKQueue.Clear();
             }
 
             if (this.PacketToSend.Count > 0)
@@ -96,6 +122,8 @@ namespace MineNET.Network
                 }
             }
 
+            this.SendQueuePacket();
+
             --this.LastUpdateTime;
         }
         #endregion
@@ -105,7 +133,6 @@ namespace MineNET.Network
         {
             if (packet.SeqNumber < this.WindowStart || packet.SeqNumber > this.WindowEnd || this.ACKQueue.ContainsKey(packet.SeqNumber))
             {
-                OutLog.Log("Error");
                 return;
             }
 
@@ -175,7 +202,7 @@ namespace MineNET.Network
                     }
                 }
 
-                if (packet.HasSplit && (packet = this.HandleSplit()) == null)
+                if (packet.HasSplit && (packet = this.HandleSplit(packet)) == null)
                 {
                     return;
                 }
@@ -193,17 +220,30 @@ namespace MineNET.Network
             }
 
             int id = packet.Buffer[0];
-            if (id < 0x86)
+            RakNetPacket pk = this.Manager.GetPacket(id, packet.Buffer);
+            if (id < 0x86 && pk != null)
             {
                 if (this.State == SessionState.Connecting)
                 {
                     if (id == RakNetConstant.ClientConnectDataPacket)
                     {
-                        OutLog.Info("Test1");
+                        ClientConnectDataPacket ccd = (ClientConnectDataPacket) pk;
+                        ServerHandShakeDataPacket shd = (ServerHandShakeDataPacket) this.Manager.GetPacket(RakNetConstant.ServerHandShakeDataPacket);
+                        shd.EndPoint = this.EndPoint;
+                        shd.SendPing = ccd.SendPing;
+                        shd.SendPong = ccd.SendPing + 1000;
+
+                        this.QueueConnectedPacket(shd, RakNetReliability.UNRELIABLE, 0, RakNetConstant.FlagImmediate);
                     }
                     else if (id == RakNetConstant.ClientHandShakeDataPacket)
                     {
-                        OutLog.Info("Test2");
+                        ClientHandShakeDataPacket chsd = (ClientHandShakeDataPacket) pk;
+
+                        OutLog.Info(chsd.EndPoint.Port == Server.Instance.EndPoint.Port);
+                        if (chsd.EndPoint.Port == Server.Instance.EndPoint.Port)
+                        {
+                            this.State = SessionState.Connected;
+                        }
                     }
                 }
                 else if (id == RakNetConstant.ClientDisconnectDataPacket)
@@ -212,25 +252,67 @@ namespace MineNET.Network
                 }
                 else if (id == RakNetConstant.OnlinePing)
                 {
+                    OnlinePing ping = (OnlinePing) pk;
+                    OnlinePong pong = (OnlinePong) this.Manager.GetPacket(RakNetConstant.OnlinePong);
+                    pong.PingID = ping.PingID;
 
+                    this.QueueConnectedPacket(pong, RakNetReliability.UNRELIABLE, 0, RakNetConstant.FlagImmediate);
                 }
                 else if (id == RakNetConstant.OnlinePong)
                 {
-
+                    //TODO: 
                 }
             }
             else if (this.State == SessionState.Connected)
             {
                 if (id == RakNetConstant.BatchPacket)
                 {
-
+                    OutLog.Info("Batch");
                 }
             }
         }
 
         //TODO: Dead Code Fix
-        public EncapsulatedPacket HandleSplit()
+        public EncapsulatedPacket HandleSplit(EncapsulatedPacket packet)
         {
+            if (!SplitPackets.ContainsKey(packet.SplitID))
+            {
+                SplitPackets.Add(packet.SplitID, new Dictionary<int, EncapsulatedPacket>());
+                if (!SplitPackets[packet.SplitID].ContainsKey(packet.SplitIndex))
+                {
+                    SplitPackets[packet.SplitID].Add(packet.SplitIndex, packet);
+                }
+            }
+            else
+            {
+                if (!SplitPackets[packet.SplitID].ContainsKey(packet.SplitIndex))
+                {
+                    SplitPackets[packet.SplitID].Add(packet.SplitIndex, packet);
+                }
+            }
+
+            if (SplitPackets[packet.SplitID].Count == packet.SplitCount)
+            {
+                EncapsulatedPacket pk = new EncapsulatedPacket();
+                int offset = 0;
+                pk.Buffer = new byte[0];
+                for (int i = 0; i < packet.SplitCount; ++i)
+                {
+                    EncapsulatedPacket p = SplitPackets[packet.SplitID][i];
+                    byte[] buffer = pk.Buffer;
+                    Array.Resize(ref buffer, pk.Buffer.Length + p.Buffer.Length);
+                    pk.Buffer = buffer;
+                    Buffer.BlockCopy(p.Buffer, 0, pk.Buffer, offset, p.Buffer.Length);
+                    offset += p.Buffer.Length;
+                }
+
+                pk.Length = pk.Buffer.Length;
+
+                SplitPackets.Remove(pk.SplitID);
+
+                return pk;
+            }
+
             return null;
         }
 
@@ -238,10 +320,113 @@ namespace MineNET.Network
         {
 
         }
+        #endregion
 
-        public void HandleOnlinePing()
+        #region Send Packet Method
+        public void AddEncapsulatedToQueue(EncapsulatedPacket packet, int flags = RakNetConstant.FlagNormal)
         {
+            if (RakNetReliability.IsOrdered(packet.Reliability))
+            {
+                packet.OrderIndex = this.OrderIndex;
+            }
+            else if (RakNetReliability.IsSequenced(packet.Reliability))
+            {
+                packet.OrderIndex = this.OrderIndex;
+                packet.MessageIndex = this.MessageIndex++;
+            }
 
+            if (packet.GetTotalLength() + 4 > this.MTUSize)
+            {
+                byte[][] buffers = Binary.SplitBytes(new MemorySpan(packet.Buffer), this.MTUSize - 60);
+                int splitID = this.SplitID++ % 65536;
+                for (int i = 0; i < buffers.Length; ++i)
+                {
+                    EncapsulatedPacket pk = new EncapsulatedPacket();
+                    pk.SplitID = splitID;
+                    pk.HasSplit = true;
+                    pk.SplitCount = buffers.Length;
+                    pk.Reliability = RakNetReliability.UNRELIABLE;
+                    pk.SplitIndex = i;
+                    pk.Buffer = buffers[i];
+                    if (i > 0)
+                    {
+                        pk.MessageIndex = this.MessageIndex++;
+                    }
+                    else
+                    {
+                        pk.MessageIndex = this.MessageIndex;
+                    }
+
+                    this.AddToQueue(pk, flags | RakNetConstant.FlagImmediate);
+                }
+            }
+            else
+            {
+                if (RakNetReliability.IsReliable(packet.Reliability))
+                {
+                    packet.MessageIndex = this.MessageIndex++;
+                }
+
+                this.AddToQueue(packet, flags);
+            }
+        }
+
+        public void QueueConnectedPacket(RakNetPacket packet, int reliability, int orderChannel, int flags = RakNetConstant.FlagNormal)
+        {
+            packet.Encode();
+
+            EncapsulatedPacket pk = new EncapsulatedPacket();
+            pk.Reliability = reliability;
+            pk.OrderChannel = orderChannel;
+            pk.Buffer = packet.ToArray();
+
+            this.AddEncapsulatedToQueue(pk, flags);
+        }
+
+        public void AddToQueue(EncapsulatedPacket pk, int flags = RakNetConstant.FlagNormal)
+        {
+            int length = this.SendQueue.Length;
+
+            if (length + pk.GetTotalLength() > this.MTUSize - 36)//IP header (20 bytes) + UDP header (8 bytes) + RakNet weird (8 bytes) = 36 bytes
+            {
+                this.SendQueuePacket();
+            }
+
+            List<object> list = new List<object>(this.SendQueue.Packets);
+            list.Add(pk);
+            this.SendQueue.Packets = list.ToArray();
+
+            if (flags == RakNetConstant.FlagImmediate)
+            {
+                this.SendQueuePacket();
+            }
+        }
+
+        public void SendQueuePacket()
+        {
+            if (this.SendQueue.Packets?.Length > 0)
+            {
+                this.SendDatagram(this.SendQueue);
+                this.SendQueue = new DataPacket4();
+            }
+        }
+
+        public void SendDatagram(DataPacket pk)
+        {
+            if (pk.SeqNumber != -1)
+            {
+                //this.RecoveryQueue.Remove(pk.SeqNumber);
+            }
+
+            pk.SeqNumber = this.LastSeqNumber++;
+            //this.RecoveryQueue[pk.SeqNumber] = pk;
+            this.SendPacket(pk);
+
+        }
+
+        public void SendPacket(RakNetPacket pk)
+        {
+            this.Manager.Send(this.EndPoint, pk);
         }
         #endregion
 

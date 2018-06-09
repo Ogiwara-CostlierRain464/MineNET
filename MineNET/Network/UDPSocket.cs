@@ -6,8 +6,6 @@ namespace MineNET.Network
 {
     public sealed class UDPSocket : INetworkSocket
     {
-        public IPEndPoint EndPoint { get; }
-
         private UdpClient client;
         public UdpClient Socket
         {
@@ -19,8 +17,7 @@ namespace MineNET.Network
 
         public UDPSocket(IPEndPoint point)
         {
-            this.EndPoint = point;
-            this.client = new UdpClient(this.EndPoint);
+            this.client = new UdpClient(point);
 
             this.client.Client.ReceiveBufferSize = int.MaxValue;
             this.client.Client.SendBufferSize = int.MaxValue;

@@ -4,7 +4,7 @@ namespace MineNET.Network.RakNetPackets
 {
     public abstract class DataPacket : RakNetPacket
     {
-        public object[] Packets { get; set; }
+        public object[] Packets { get; set; } = new object[0];
         public int SeqNumber { get; set; }
 
         public override void Encode()

@@ -36,6 +36,7 @@ namespace MineNET
 
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
+        public IPEndPoint EndPoint { get; set; }
         #endregion
 
         #region Ctor
@@ -56,32 +57,7 @@ namespace MineNET
                     sw.Start();
 
                     Thread.CurrentThread.Name = "ServerLaunchThread";
-
-                    this.Clock = new ConstantClockManager();
-
-                    this.Event = new EventManager();
-                    this.Event.Server.OnServerStart(this, new ServerStartEventArgs());
-
-                    //InitConfig
-                    this.Config = MineNETConfig.Load<MineNETConfig>($"{ExecutePath}\\MineNET.yml");
-                    this.ServerProperty = ServerConfig.Load<ServerConfig>($"{ExecutePath}\\ServerProperties.yml");
-
-                    this.Logger = new Logger();
-                    this.Command = new CommandManager();
-
-                    OutLog.Info("%server.start");
-
-                    if (this.NetworkSocket == null)
-                    {
-                        int port = this.ServerProperty.ServerPort;
-                        OutLog.Info("%server.network.start", port);
-
-                        IPEndPoint point = new IPEndPoint(IPAddress.Any, port);
-                        this.SetNetworkSocket(new UDPSocket(point));
-                    }
-                    this.Network = new NetworkManager();
-                    OutLog.Info("%server.network.start.done", sw.Elapsed.ToString(@"mm\:ss\.fff"));
-
+                    this.Init(sw);
                     sw.Stop();
 
                     OutLog.Info("%server.start.done");
@@ -153,6 +129,40 @@ namespace MineNET
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region Init Method
+        public void Init(Stopwatch sw)
+        {
+            this.Clock = new ConstantClockManager();
+
+            this.Event = new EventManager();
+            this.Event.Server.OnServerStart(this, new ServerStartEventArgs());
+
+            this.LoadConfig();
+
+            this.Logger = new Logger();
+            this.Command = new CommandManager();
+
+            OutLog.Info("%server.start");
+
+            if (this.NetworkSocket == null)
+            {
+                int port = this.ServerProperty.ServerPort;
+                OutLog.Info("%server.network.start", port);
+
+                this.EndPoint = new IPEndPoint(IPAddress.Any, port);
+                this.SetNetworkSocket(new UDPSocket(this.EndPoint));
+            }
+            this.Network = new NetworkManager();
+            OutLog.Info("%server.network.start.done", sw.Elapsed.ToString(@"mm\:ss\.fff"));
+        }
+
+        public void LoadConfig()
+        {
+            this.Config = MineNETConfig.Load<MineNETConfig>($"{ExecutePath}\\MineNET.yml");
+            this.ServerProperty = ServerConfig.Load<ServerConfig>($"{ExecutePath}\\ServerProperties.yml");
         }
         #endregion
 

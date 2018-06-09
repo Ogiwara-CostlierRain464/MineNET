@@ -39,6 +39,9 @@
 
         };
 
+        public const int FlagNormal = 0;
+        public const int FlagImmediate = 1;
+
         public const byte OnlinePing = 0x00;
         public const byte OfflinePing = 0x01;
 

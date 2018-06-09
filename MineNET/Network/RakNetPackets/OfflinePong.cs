@@ -5,7 +5,6 @@
         public override byte MessageID { get; protected set; } = RakNetConstant.OfflinePong;
 
         public long Ping { get; set; }
-
         public long ServerID { get; set; }
         public string ServerName { get; set; }
 

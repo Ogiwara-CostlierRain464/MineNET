@@ -102,6 +102,10 @@
     <Compile Include="Commands\Defaults\StopCommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Network\RakNetPackets\Ack.cs" />
+    <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
+    <Compile Include="Network\RakNetPackets\ClientConnectDataPacket.cs" />
+    <Compile Include="Network\RakNetPackets\ClientHandShakeDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket5.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket0.cs" />
@@ -120,10 +124,14 @@
     <Compile Include="Network\RakNetPackets\DataPacketE.cs" />
     <Compile Include="Network\RakNetPackets\DataPacketF.cs" />
     <Compile Include="Network\RakNetPackets\EncapsulatedPacket.cs" />
+    <Compile Include="Network\RakNetPackets\Nack.cs" />
+    <Compile Include="Network\RakNetPackets\OnlinePing.cs" />
+    <Compile Include="Network\RakNetPackets\OnlinePong.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingReply1.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingReply2.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest1.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest2.cs" />
+    <Compile Include="Network\RakNetPackets\ServerHandShakeDataPacket.cs" />
     <Compile Include="Network\RakNetReliability.cs" />
     <Compile Include="Network\SessionState.cs" />
     <Compile Include="Registry\EntityRegistry.cs" />
@@ -191,6 +199,8 @@
     <Compile Include="Utils\VarInt.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Blocks\" />
+    <Folder Include="Items\" />
     <Folder Include="Network\Packets\" />
   </ItemGroup>
   <ItemGroup>

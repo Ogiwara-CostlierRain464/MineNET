@@ -53,12 +53,17 @@ namespace MineNET.Network
 
         private void RegisterPackets()
         {
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.OnlinePing, new OnlinePing());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OfflinePing, new OfflinePing());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.OnlinePong, new OnlinePong());
 
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingRequest1, new OpenConnectingRequest1());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingReply1, new OpenConnectingReply1());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingRequest2, new OpenConnectingRequest2());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OpenConnectingReply2, new OpenConnectingReply2());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.ClientConnectDataPacket, new ClientConnectDataPacket());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.ServerHandShakeDataPacket, new ServerHandShakeDataPacket());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.ClientHandShakeDataPacket, new ClientHandShakeDataPacket());
 
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.OfflinePong, new OfflinePong());
 
@@ -78,6 +83,9 @@ namespace MineNET.Network
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketD, new DataPacketD());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketE, new DataPacketE());
             MineNET_Registries.RakNetPacket.Add(RakNetConstant.DataPacketF, new DataPacketF());
+
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.AckPacket, new Ack());
+            MineNET_Registries.RakNetPacket.Add(RakNetConstant.NackPacket, new Nack());
         }
         #endregion
 
@@ -191,7 +199,7 @@ namespace MineNET.Network
                 rep2.EndPoint = req2.EndPoint;
                 rep2.MTUSize = req2.MTUSize;
 
-                if (req2.EndPoint.Port == Server.Instance.NetworkSocket.EndPoint.Port)
+                if (req2.EndPoint.Port == Server.Instance.EndPoint.Port)
                 {
                     this.SessionCreate(endPoint, req2.ClientID, req2.MTUSize);
                 }
@@ -245,7 +253,7 @@ namespace MineNET.Network
         #endregion
 
         #region Get Registry Packet Method
-        private RakNetPacket GetPacket(int msgId, byte[] buffer = null)
+        public RakNetPacket GetPacket(int msgId, byte[] buffer = null)
         {
             RakNetPacket pk = null;
             MineNET_Registries.RakNetPacket.TryGetValue(msgId, out pk);

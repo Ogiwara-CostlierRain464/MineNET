@@ -14,5 +14,34 @@
         public const int UNRELIABLE_WITH_ACK_RECEIPT = 5;
         public const int RELIABLE_WITH_ACK_RECEIPT = 6;
         public const int RELIABLE_ORDERED_WITH_ACK_RECEIPT = 7;
+
+        public static bool IsReliable(int reliability)
+        {
+            return reliability == RELIABLE ||
+                   reliability == RELIABLE_ORDERED ||
+                   reliability == RELIABLE_SEQUENCED ||
+                   reliability == RELIABLE_ORDERED_WITH_ACK_RECEIPT ||
+                   reliability == RELIABLE_WITH_ACK_RECEIPT;
+        }
+
+        public static bool IsSequenced(int reliability)
+        {
+            return reliability == UNRELIABLE_SEQUENCED ||
+                   reliability == RELIABLE_SEQUENCED;
+        }
+
+        public static bool IsOrdered(int reliability)
+        {
+            return reliability == RELIABLE_ORDERED ||
+                   reliability == RELIABLE_ORDERED_WITH_ACK_RECEIPT;
+        }
+
+        public static bool IsSequencedOrOrdered(int reliability)
+        {
+            return reliability == UNRELIABLE_SEQUENCED ||
+                   reliability == RELIABLE_ORDERED ||
+                   reliability == RELIABLE_SEQUENCED ||
+                   reliability == RELIABLE_ORDERED_WITH_ACK_RECEIPT;
+        }
     }
 }
