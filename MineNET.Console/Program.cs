@@ -12,8 +12,11 @@ namespace MineNET.Console
                 server = new Server();
                 server.Start();
 
+                long tick = 0;
                 while (server.Status == ServerStatus.Running)
                 {
+                    server.OnUpdate(tick);
+                    tick++;
                 }
             }
             catch (Exception e)

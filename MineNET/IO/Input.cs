@@ -1,6 +1,7 @@
 ﻿using MineNET.Commands;
 using MineNET.Events.IOEvents;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace MineNET.IO
@@ -11,6 +12,8 @@ namespace MineNET.IO
 
         public bool IsRunning { get; private set; }
         public bool UsingGUI { get; private set; }
+
+        public ConcurrentQueue<string> CommandQueue { get; private set; } = new ConcurrentQueue<string>();
 
         public Input()
         {
@@ -41,6 +44,7 @@ namespace MineNET.IO
         {
             this.IsRunning = false;
 
+            this.InputThread.Abort();
             this.InputThread = null;
         }
 
@@ -51,10 +55,20 @@ namespace MineNET.IO
                 string inputText = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(inputText))
                 {
-                    InputActionEventArgs ev = new InputActionEventArgs(inputText);
-                    Server.Instance.Event.IO.OnInputAction(this, ev);
-                    this.InputAction(ev.InputText);
+                    this.CommandQueue.Enqueue(inputText);
                 }
+            }
+        }
+
+        public void GetQueueCommand()
+        {
+            if (!this.CommandQueue.IsEmpty)
+            {
+                string inputText;
+                this.CommandQueue.TryDequeue(out inputText);
+                InputActionEventArgs ev = new InputActionEventArgs(inputText);
+                Server.Instance.Event.IO.OnInputAction(this, ev);
+                this.InputAction(ev.InputText);
             }
         }
     }

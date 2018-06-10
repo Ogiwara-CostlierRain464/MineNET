@@ -5,6 +5,7 @@
         Stop,
         Start,
         Running,
+        Stoping,
         Error
     }
 }

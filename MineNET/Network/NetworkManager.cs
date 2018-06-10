@@ -71,6 +71,8 @@ namespace MineNET.Network
             MineNET_Registries.RakNetPacket.Add(RakNetProtocol.ServerHandShakeDataPacket, new ServerHandShakeDataPacket());
             MineNET_Registries.RakNetPacket.Add(RakNetProtocol.ClientHandShakeDataPacket, new ClientHandShakeDataPacket());
 
+            MineNET_Registries.RakNetPacket.Add(RakNetProtocol.ClientDisconnectDataPacket, new ClientDisconnectDataPacket());
+
             MineNET_Registries.RakNetPacket.Add(RakNetProtocol.OfflinePong, new OfflinePong());
 
             MineNET_Registries.RakNetPacket.Add(RakNetProtocol.DataPacket0, new DataPacket0());
@@ -291,6 +293,8 @@ namespace MineNET.Network
             {
                 PlayerCreateEventArgs ev = new PlayerCreateEventArgs(new Player());
                 Server.Instance.Event.Player.OnPlayerCreate(this, ev);
+
+                ev.CustomPlayer.EndPoint = endPoint;
 
                 this.Players.TryAdd(endPointStr, ev.CustomPlayer);
             }

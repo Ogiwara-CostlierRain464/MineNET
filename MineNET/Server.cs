@@ -1,10 +1,12 @@
 ﻿using MineNET.Commands;
+using MineNET.Entities.Players;
 using MineNET.Events;
 using MineNET.Events.ServerEvents;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -56,7 +58,7 @@ namespace MineNET
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
 
-                    Thread.CurrentThread.Name = "ServerLaunchThread";
+                    Thread.CurrentThread.Name = "ServerThread";
                     this.Init(sw);
                     sw.Stop();
 
@@ -85,7 +87,7 @@ namespace MineNET
 
         }
 
-        public bool Stop()
+        public bool Stop(string reason = "")
         {
             if (this.Status == ServerStatus.Running)
             {
@@ -93,6 +95,19 @@ namespace MineNET
                 {
                     this.Event.Server.OnServerStop(this, new ServerStopEventArgs());
                     OutLog.Info("%server.stoping");
+
+                    this.Status = ServerStatus.Stoping;
+
+                    foreach (Player player in this.GetPlayers())
+                    {
+                        if (reason == "")
+                        {
+                            reason = "disconnect.closed";
+                        }
+
+                        player.Close(reason);
+                    }
+
                     this.Dispose();
                     this.Status = ServerStatus.Stop;
 
@@ -166,6 +181,18 @@ namespace MineNET
         }
         #endregion
 
+        #region Update Method
+        public void OnUpdate(long tick)
+        {
+            if (this.Status != ServerStatus.Running)
+            {
+                return;
+            }
+
+            this.Logger.Input.GetQueueCommand();
+        }
+        #endregion
+
         #region Interface Set Method
         public bool SetNetworkSocket(INetworkSocket socket)
         {
@@ -191,6 +218,19 @@ namespace MineNET
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region Player Method
+        public Player[] GetPlayers()
+        {
+            List<Player> list = new List<Player>();
+            foreach (Player player in this.Network.Players.Values)
+            {
+                list.Add(player);
+            }
+
+            return list.ToArray();
         }
         #endregion
 

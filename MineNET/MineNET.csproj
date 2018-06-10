@@ -110,13 +110,16 @@
     <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
+    <Compile Include="Network\MinecraftPackets\DisconnectPacket.cs" />
     <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftProtocol.cs" />
+    <Compile Include="Network\MinecraftPackets\PlayStatusPacket.cs" />
     <Compile Include="Network\RakNetPackets\Ack.cs" />
     <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
     <Compile Include="Network\RakNetPackets\BatchPacket.cs" />
     <Compile Include="Network\RakNetPackets\ClientConnectDataPacket.cs" />
+    <Compile Include="Network\RakNetPackets\ClientDisconnectDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\ClientHandShakeDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket5.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket.cs" />
@@ -216,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Blocks\" />
+    <Folder Include="Init\" />
     <Folder Include="Items\" />
   </ItemGroup>
   <ItemGroup>

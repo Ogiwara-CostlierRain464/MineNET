@@ -11,7 +11,7 @@ namespace MineNET.Network
 {
     public class NetworkSession
     {
-        #region Static
+        #region Static Property
         public static int WindowSize { get; } = 2048;
         public static int TimedOutTime { get; } = 3000;
         #endregion
@@ -41,6 +41,7 @@ namespace MineNET.Network
         public int SplitID { get; private set; }
         public int OrderIndex { get; private set; }
 
+        public BatchPacket BatchPacketQueue { get; private set; } = new BatchPacket();
         public DataPacket SendQueue = new DataPacket4();
         public Dictionary<int, Dictionary<int, EncapsulatedPacket>> SplitPackets { get; set; } = new Dictionary<int, Dictionary<int, EncapsulatedPacket>>();
 
@@ -124,6 +125,7 @@ namespace MineNET.Network
                 }
             }
 
+            this.SendBatchPacket(RakNetPacketReliability.RELIABLE, RakNetProtocol.FlagNormal);
             this.SendQueuePacket();
 
             --this.LastUpdateTime;
@@ -433,6 +435,35 @@ namespace MineNET.Network
             this.AddEncapsulatedToQueue(pk, flags);
         }
 
+        public void AddPacketBatchQueue(MinecraftPacket packet, int reliability, int flag = RakNetProtocol.FlagNormal)
+        {
+            packet.Encode();
+
+            byte[] buffer = packet.ToArray();
+
+            BinaryStream st = new BinaryStream();
+            st.WriteVarInt((int) packet.Length);
+            st.WriteBytes(buffer);
+
+            List<byte> list = new List<byte>(this.BatchPacketQueue.Payload);
+            list.AddRange(st.ToArray());
+            this.BatchPacketQueue.Payload = list.ToArray();
+
+            if (flag == RakNetProtocol.FlagImmediate)
+            {
+                this.SendBatchPacket(reliability, flag);
+            }
+        }
+
+        public void SendBatchPacket(int reliability, int flag = RakNetProtocol.FlagNormal)
+        {
+            if (this.BatchPacketQueue.Payload.Length > 0)
+            {
+                this.QueueConnectedPacket(this.BatchPacketQueue, reliability, flag);
+                this.BatchPacketQueue = (BatchPacket) this.Manager.GetRakNetPacket(RakNetProtocol.BatchPacket);
+            }
+        }
+
         public void AddToQueue(EncapsulatedPacket pk, int flags = RakNetProtocol.FlagNormal)
         {
             int length = this.SendQueue.Length;
@@ -494,6 +525,9 @@ namespace MineNET.Network
             if (this.State != SessionState.Disconnected)
             {
                 this.State = SessionState.Disconnected;
+
+                ClientDisconnectDataPacket pk = new ClientDisconnectDataPacket();
+                this.QueueConnectedPacket(pk, RakNetPacketReliability.UNRELIABLE, 0, RakNetProtocol.FlagImmediate);
 
                 OutLog.Log("%server.network.raknet.sessionClose", this.EndPoint);
                 this.Manager?.RemoveSession(this.EndPoint);
