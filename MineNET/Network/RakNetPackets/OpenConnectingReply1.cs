@@ -2,7 +2,7 @@
 {
     public class OpenConnectingReply1 : OfflineMessage
     {
-        public override byte MessageID { get; protected set; } = RakNetConstant.OpenConnectingReply1;
+        public override byte MessageID { get; protected set; } = RakNetProtocol.OpenConnectingReply1;
 
         public long ServerID { get; set; }
         public short MTUSize { get; set; }

@@ -101,9 +101,21 @@
     <Compile Include="Commands\ConsoleCommandSender.cs" />
     <Compile Include="Commands\Defaults\StopCommand.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Data\ClientData.cs" />
+    <Compile Include="Data\LoginData.cs" />
+    <Compile Include="Data\Skin.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Events\NetworkEvents\NetworkCreateSessionEventArgs.cs" />
+    <Compile Include="Events\NetworkEvents\NetworkEvent.cs" />
+    <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
+    <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
+    <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
+    <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\MinecraftProtocol.cs" />
     <Compile Include="Network\RakNetPackets\Ack.cs" />
     <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
+    <Compile Include="Network\RakNetPackets\BatchPacket.cs" />
     <Compile Include="Network\RakNetPackets\ClientConnectDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\ClientHandShakeDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\DataPacket5.cs" />
@@ -132,7 +144,7 @@
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest1.cs" />
     <Compile Include="Network\RakNetPackets\OpenConnectingRequest2.cs" />
     <Compile Include="Network\RakNetPackets\ServerHandShakeDataPacket.cs" />
-    <Compile Include="Network\RakNetReliability.cs" />
+    <Compile Include="Network\RakNetPackets\RakNetPacketReliability.cs" />
     <Compile Include="Network\SessionState.cs" />
     <Compile Include="Registry\EntityRegistry.cs" />
     <Compile Include="Events\EventManager.cs" />
@@ -167,15 +179,16 @@
     <Compile Include="Network\RakNetPackets\OfflineMessage.cs" />
     <Compile Include="Network\RakNetPackets\OfflinePing.cs" />
     <Compile Include="Network\RakNetPackets\OfflinePong.cs" />
-    <Compile Include="Network\RakNetConstant.cs" />
+    <Compile Include="Network\RakNetPackets\RakNetProtocol.cs" />
     <Compile Include="Network\RakNetPackets\RakNetPacket.cs" />
     <Compile Include="Network\UDPSocket.cs" />
     <Compile Include="OutLog.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Entities\Players\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registry\CommandRegistry.cs" />
     <Compile Include="Registry\IDictionaryRegistry.cs" />
     <Compile Include="Registry\IListRegistry.cs" />
+    <Compile Include="Registry\MinecraftPacketRegistry.cs" />
     <Compile Include="Registry\MineNET_Registries.cs" />
     <Compile Include="Registry\RakNetPacketRegistry.cs" />
     <Compile Include="Server.cs" />
@@ -194,20 +207,19 @@
     <Compile Include="Utils\Config\Yaml\CommentObjectGraphVisitor.cs" />
     <Compile Include="Utils\Config\Yaml\CommentPropertyDescriptor.cs" />
     <Compile Include="Utils\Config\Yaml\CommentTypeInspector.cs" />
+    <Compile Include="Utils\JWT.cs" />
     <Compile Include="Utils\MemorySpan.cs" />
     <Compile Include="Utils\Random.cs" />
     <Compile Include="Utils\VarInt.cs" />
+    <Compile Include="Utils\ZlibStream.cs" />
+    <Compile Include="Values\UUID.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Blocks\" />
     <Folder Include="Items\" />
-    <Folder Include="Network\Packets\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ClassDiagrams\MineNET.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

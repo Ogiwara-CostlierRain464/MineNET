@@ -1,4 +1,5 @@
-﻿using MineNET.Events.PlayerEvents;
+﻿using MineNET.Entities.Players;
+using MineNET.Events.PlayerEvents;
 using MineNET.Events.ServerEvents;
 
 namespace MineNET.Commands

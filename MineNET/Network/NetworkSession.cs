@@ -1,4 +1,6 @@
-﻿using MineNET.Network.RakNetPackets;
+﻿using MineNET.Entities.Players;
+using MineNET.Network.MinecraftPackets;
+using MineNET.Network.RakNetPackets;
 using MineNET.Utils;
 using System;
 using System.Collections.Concurrent;
@@ -220,59 +222,107 @@ namespace MineNET.Network
             }
 
             int id = packet.Buffer[0];
-            RakNetPacket pk = this.Manager.GetPacket(id, packet.Buffer);
-            if (id < 0x86 && pk != null)
+            RakNetPacket pk = this.Manager.GetRakNetPacket(id, packet.Buffer);
+            if (pk != null)
             {
-                if (this.State == SessionState.Connecting)
+                if (id < 0x86)
                 {
-                    if (id == RakNetConstant.ClientConnectDataPacket)
+                    if (this.State == SessionState.Connecting)
                     {
-                        ClientConnectDataPacket ccd = (ClientConnectDataPacket) pk;
-                        ServerHandShakeDataPacket shd = (ServerHandShakeDataPacket) this.Manager.GetPacket(RakNetConstant.ServerHandShakeDataPacket);
-                        shd.EndPoint = this.EndPoint;
-                        shd.SendPing = ccd.SendPing;
-                        shd.SendPong = ccd.SendPing + 1000;
-
-                        this.QueueConnectedPacket(shd, RakNetReliability.UNRELIABLE, 0, RakNetConstant.FlagImmediate);
-                    }
-                    else if (id == RakNetConstant.ClientHandShakeDataPacket)
-                    {
-                        ClientHandShakeDataPacket chsd = (ClientHandShakeDataPacket) pk;
-
-                        OutLog.Info(chsd.EndPoint.Port == Server.Instance.EndPoint.Port);
-                        if (chsd.EndPoint.Port == Server.Instance.EndPoint.Port)
+                        if (id == RakNetProtocol.ClientConnectDataPacket)
                         {
-                            this.State = SessionState.Connected;
+                            ClientConnectDataPacket ccd = (ClientConnectDataPacket) pk;
+                            ServerHandShakeDataPacket shd = (ServerHandShakeDataPacket) this.Manager.GetRakNetPacket(RakNetProtocol.ServerHandShakeDataPacket);
+                            shd.EndPoint = this.EndPoint;
+                            shd.SendPing = ccd.SendPing;
+                            shd.SendPong = ccd.SendPing + 1000;
+
+                            this.QueueConnectedPacket(shd, RakNetPacketReliability.UNRELIABLE, 0, RakNetProtocol.FlagImmediate);
+                        }
+                        else if (id == RakNetProtocol.ClientHandShakeDataPacket)
+                        {
+                            ClientHandShakeDataPacket chsd = (ClientHandShakeDataPacket) pk;
+
+                            if (chsd.EndPoint.Port == Server.Instance.EndPoint.Port)
+                            {
+                                this.State = SessionState.Connected;
+                            }
                         }
                     }
-                }
-                else if (id == RakNetConstant.ClientDisconnectDataPacket)
-                {
-                    this.Disconnect("clientDisconnect");
-                }
-                else if (id == RakNetConstant.OnlinePing)
-                {
-                    OnlinePing ping = (OnlinePing) pk;
-                    OnlinePong pong = (OnlinePong) this.Manager.GetPacket(RakNetConstant.OnlinePong);
-                    pong.PingID = ping.PingID;
+                    else if (id == RakNetProtocol.ClientDisconnectDataPacket)
+                    {
+                        this.Disconnect("clientDisconnect");
+                    }
+                    else if (id == RakNetProtocol.OnlinePing)
+                    {
+                        OnlinePing ping = (OnlinePing) pk;
+                        OnlinePong pong = (OnlinePong) this.Manager.GetRakNetPacket(RakNetProtocol.OnlinePong);
+                        pong.PingID = ping.PingID;
 
-                    this.QueueConnectedPacket(pong, RakNetReliability.UNRELIABLE, 0, RakNetConstant.FlagImmediate);
+                        this.QueueConnectedPacket(pong, RakNetPacketReliability.UNRELIABLE, 0, RakNetProtocol.FlagImmediate);
+                    }
+                    else if (id == RakNetProtocol.OnlinePong)
+                    {
+                        //TODO: 
+                    }
                 }
-                else if (id == RakNetConstant.OnlinePong)
+                else if (this.State == SessionState.Connected)
                 {
-                    //TODO: 
-                }
-            }
-            else if (this.State == SessionState.Connected)
-            {
-                if (id == RakNetConstant.BatchPacket)
-                {
-                    OutLog.Info("Batch");
+                    if (id == RakNetProtocol.BatchPacket)
+                    {
+                        this.HandleBatchPacket((BatchPacket) pk);
+                    }
                 }
             }
         }
 
-        //TODO: Dead Code Fix
+        public void HandleBatchPacket(BatchPacket packet)
+        {
+            string endPointStr = this.EndPoint.ToString();
+
+            if (this.Manager.Players.ContainsKey(endPointStr))
+            {
+                Player player = this.Manager.Players[endPointStr];
+                this.HandleMinecraftPacket(packet, player);
+            }
+        }
+
+        public void HandleMinecraftPacket(BatchPacket pk, Player player)
+        {
+            using (BinaryStream stream = new BinaryStream(pk.Payload))
+            {
+                while (!stream.EndOfStream)
+                {
+                    int len = stream.ReadVarInt();
+                    byte[] buffer = stream.ReadBytes(len);
+
+                    OutLog.Info(buffer.Length);
+                    using (MinecraftPacket packet = this.Manager.GetMinecraftPacket(buffer[0], buffer))
+                    {
+                        if (packet != null)
+                        {
+                            packet.SetBuffer(buffer);
+                            packet.Decode();
+
+                            /*DataPacketReceiveArgs args = new DataPacketReceiveArgs(player, pk);
+                            ServerEvents.OnPacketReceive(args);
+
+                            if (args.IsCancel)
+                            {
+                                return;
+                            }*/
+
+                            player.OnPacketHandle(packet);
+                        }
+                        else
+                        {
+                            //OutLog.Log("%server_packet_notHandle", buffer[0].ToString("X"), buffer.Length);
+                        }
+                    }
+                }
+            }
+        }
+
         public EncapsulatedPacket HandleSplit(EncapsulatedPacket packet)
         {
             if (!SplitPackets.ContainsKey(packet.SplitID))
@@ -323,13 +373,13 @@ namespace MineNET.Network
         #endregion
 
         #region Send Packet Method
-        public void AddEncapsulatedToQueue(EncapsulatedPacket packet, int flags = RakNetConstant.FlagNormal)
+        public void AddEncapsulatedToQueue(EncapsulatedPacket packet, int flags = RakNetProtocol.FlagNormal)
         {
-            if (RakNetReliability.IsOrdered(packet.Reliability))
+            if (RakNetPacketReliability.IsOrdered(packet.Reliability))
             {
                 packet.OrderIndex = this.OrderIndex;
             }
-            else if (RakNetReliability.IsSequenced(packet.Reliability))
+            else if (RakNetPacketReliability.IsSequenced(packet.Reliability))
             {
                 packet.OrderIndex = this.OrderIndex;
                 packet.MessageIndex = this.MessageIndex++;
@@ -345,7 +395,7 @@ namespace MineNET.Network
                     pk.SplitID = splitID;
                     pk.HasSplit = true;
                     pk.SplitCount = buffers.Length;
-                    pk.Reliability = RakNetReliability.UNRELIABLE;
+                    pk.Reliability = RakNetPacketReliability.UNRELIABLE;
                     pk.SplitIndex = i;
                     pk.Buffer = buffers[i];
                     if (i > 0)
@@ -357,12 +407,12 @@ namespace MineNET.Network
                         pk.MessageIndex = this.MessageIndex;
                     }
 
-                    this.AddToQueue(pk, flags | RakNetConstant.FlagImmediate);
+                    this.AddToQueue(pk, flags | RakNetProtocol.FlagImmediate);
                 }
             }
             else
             {
-                if (RakNetReliability.IsReliable(packet.Reliability))
+                if (RakNetPacketReliability.IsReliable(packet.Reliability))
                 {
                     packet.MessageIndex = this.MessageIndex++;
                 }
@@ -371,7 +421,7 @@ namespace MineNET.Network
             }
         }
 
-        public void QueueConnectedPacket(RakNetPacket packet, int reliability, int orderChannel, int flags = RakNetConstant.FlagNormal)
+        public void QueueConnectedPacket(RakNetPacket packet, int reliability, int orderChannel, int flags = RakNetProtocol.FlagNormal)
         {
             packet.Encode();
 
@@ -383,7 +433,7 @@ namespace MineNET.Network
             this.AddEncapsulatedToQueue(pk, flags);
         }
 
-        public void AddToQueue(EncapsulatedPacket pk, int flags = RakNetConstant.FlagNormal)
+        public void AddToQueue(EncapsulatedPacket pk, int flags = RakNetProtocol.FlagNormal)
         {
             int length = this.SendQueue.Length;
 
@@ -396,7 +446,7 @@ namespace MineNET.Network
             list.Add(pk);
             this.SendQueue.Packets = list.ToArray();
 
-            if (flags == RakNetConstant.FlagImmediate)
+            if (flags == RakNetProtocol.FlagImmediate)
             {
                 this.SendQueuePacket();
             }

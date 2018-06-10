@@ -1,10 +1,10 @@
-﻿namespace MineNET.Network
+﻿namespace MineNET.Network.RakNetPackets
 {
     /// <summary>
     /// from https://github.com/OculusVR/RakNet/blob/master/Source/PacketPriority.h
     /// </summary>
     /// 
-    public static class RakNetReliability
+    public static class RakNetPacketReliability
     {
         public const int UNRELIABLE = 0;
         public const int UNRELIABLE_SEQUENCED = 1;

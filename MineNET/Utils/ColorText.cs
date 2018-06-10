@@ -2,7 +2,7 @@
 {
     public struct ColorText
     {
-        public const string CODE = "§";
+        public const string Code = "§";
 
         private char value;
 
@@ -21,7 +21,7 @@
 
         public override string ToString()
         {
-            return $"{CODE}{this.value}";
+            return $"{Code}{this.value}";
         }
     }
 }

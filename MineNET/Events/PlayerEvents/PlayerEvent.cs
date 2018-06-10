@@ -9,5 +9,11 @@ namespace MineNET.Events.PlayerEvents
         {
             this.PlayerCommand?.Invoke(sender, e);
         }
+
+        public event EventHandler<PlayerCreateEventArgs> PlayerCreate;
+        internal void OnPlayerCreate(object sender, PlayerCreateEventArgs e)
+        {
+            this.PlayerCreate?.Invoke(sender, e);
+        }
     }
 }

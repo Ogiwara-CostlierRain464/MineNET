@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MineNET.Entities.Players;
+using System;
 
 namespace MineNET.Events.PlayerEvents
 {

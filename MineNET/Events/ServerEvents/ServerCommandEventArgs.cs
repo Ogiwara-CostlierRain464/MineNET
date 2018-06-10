@@ -4,6 +4,7 @@
     {
         public string Command { get; set; }
         public bool IsCancel { get; set; }
+
         public ServerCommandEventArgs(string command)
         {
             this.Server = Server.Instance;

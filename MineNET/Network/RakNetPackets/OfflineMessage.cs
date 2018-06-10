@@ -7,17 +7,17 @@ namespace MineNET.Network.RakNetPackets
         public byte[] Magic { get; private set; }
         public void ReadMagic()
         {
-            this.Magic = this.ReadBytes(RakNetConstant.Magic.Length);
+            this.Magic = this.ReadBytes(RakNetProtocol.Magic.Length);
         }
 
         public void WriteMagic()
         {
-            this.WriteBytes(RakNetConstant.Magic);
+            this.WriteBytes(RakNetProtocol.Magic);
         }
 
         public bool IsValid()
         {
-            return this.Magic.SequenceEqual(RakNetConstant.Magic);
+            return this.Magic.SequenceEqual(RakNetProtocol.Magic);
         }
     }
 }

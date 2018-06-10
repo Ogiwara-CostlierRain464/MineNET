@@ -1,8 +1,8 @@
 ﻿using MineNET.Commands;
-using MineNET.Entities;
+using MineNET.Network.MinecraftPackets;
 using System;
 
-namespace MineNET
+namespace MineNET.Entities.Players
 {
     public class Player : Entity, CommandSender
     {
@@ -30,5 +30,20 @@ namespace MineNET
         {
             throw new NotImplementedException();
         }
+
+        #region Packet Handle Method
+        public void OnPacketHandle(MinecraftPacket packet)
+        {
+            if (packet is LoginPacket)
+            {
+                this.HandleLoginPacket((LoginPacket) packet);
+            }
+        }
+
+        public void HandleLoginPacket(LoginPacket packet)
+        {
+            OutLog.Info(packet.Protocol);
+        }
+        #endregion
     }
 }

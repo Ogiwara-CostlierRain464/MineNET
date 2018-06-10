@@ -2,6 +2,6 @@
 {
     public class DataPacket1 : DataPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetConstant.DataPacket1;
+        public override byte MessageID { get; protected set; } = RakNetProtocol.DataPacket1;
     }
 }

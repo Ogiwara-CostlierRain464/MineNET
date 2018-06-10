@@ -4,7 +4,7 @@ namespace MineNET.Network.RakNetPackets
 {
     public class ServerHandShakeDataPacket : RakNetPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetConstant.ServerHandShakeDataPacket;
+        public override byte MessageID { get; protected set; } = RakNetProtocol.ServerHandShakeDataPacket;
 
         public IPEndPoint EndPoint { get; set; }
         public IPEndPoint[] SystemEndPoints { get; set; } = new IPEndPoint[]

@@ -2,6 +2,6 @@
 {
     public class Nack : AcknowledgePacket
     {
-        public override byte MessageID { get; protected set; } = RakNetConstant.NackPacket;
+        public override byte MessageID { get; protected set; } = RakNetProtocol.NackPacket;
     }
 }

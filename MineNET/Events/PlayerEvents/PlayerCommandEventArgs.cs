@@ -1,4 +1,6 @@
-﻿namespace MineNET.Events.PlayerEvents
+﻿using MineNET.Entities.Players;
+
+namespace MineNET.Events.PlayerEvents
 {
     public class PlayerCommandEventArgs : PlayerEventArgs, ICancelable
     {

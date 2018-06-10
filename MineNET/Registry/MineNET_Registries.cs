@@ -10,6 +10,7 @@ namespace MineNET
         public static EntityRegistry Entity { get; } = new EntityRegistry();
         //Item
         public static RakNetPacketRegistry RakNetPacket { get; } = new RakNetPacketRegistry();
+        public static MinecraftPacketRegistry MinecraftPacket { get; } = new MinecraftPacketRegistry();
 
     }
 }

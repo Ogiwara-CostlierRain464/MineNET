@@ -1,6 +1,6 @@
-﻿namespace MineNET.Network
+﻿namespace MineNET.Network.RakNetPackets
 {
-    public static class RakNetConstant
+    public static class RakNetProtocol
     {
         public static readonly byte[] Magic = new byte[]
         {
