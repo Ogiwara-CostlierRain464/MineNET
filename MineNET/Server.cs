@@ -36,6 +36,8 @@ namespace MineNET
         public ILogger Logger { get; private set; }
         public CommandManager Command { get; private set; }
 
+        public IServerListInfo ServerList { get; set; }
+
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
         public IPEndPoint EndPoint { get; set; }
@@ -66,7 +68,7 @@ namespace MineNET
                     OutLog.Info("%server.start.done2", sw.Elapsed.ToString(@"mm\:ss\.fff"));
                     this.Status = ServerStatus.Running;
 
-                    //TODO ServerStartedEvent...
+                    //TODO: ServerStartedEvent...
                     return true;
                 }
                 catch (Exception e)
@@ -111,7 +113,7 @@ namespace MineNET
                     this.Dispose();
                     this.Status = ServerStatus.Stop;
 
-                    //TODO ServerStopedEvent...
+                    //TODO: ServerStopedEvent...
                     return true;
                 }
                 catch
@@ -130,14 +132,14 @@ namespace MineNET
         {
             if (this.Status == ServerStatus.Running)
             {
-                //TODO ServerErrorStopEvent...
+                //TODO: ServerErrorStopEvent...
                 OutLog.Fatal("%server.error.stop");
                 OutLog.Error(e.ToString());
                 OutLog.Info("%server.stoping");
                 this.Dispose();
                 this.Status = ServerStatus.Stop;
 
-                //TODO ServerErrorStopedEvent...
+                //TODO: ServerErrorStopedEvent...
                 return true;
             }
             else
@@ -161,6 +163,8 @@ namespace MineNET
 
             this.Logger = new Logger();
             this.Command = new CommandManager();
+
+            this.ServerList = new ServerListInfo();
 
             OutLog.Info("%server.start");
 

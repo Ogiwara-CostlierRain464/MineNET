@@ -28,7 +28,7 @@
 
             //Server.Instance.BroadcastMessage(new TranslationMessage("commands.stop.start"));
 
-            Server.Instance.Stop();//TODO msg
+            Server.Instance.Stop();//TODO: msg
             return true;
         }
     }

@@ -208,7 +208,7 @@ namespace MineNET.Network
                 OfflinePong pong = (OfflinePong) this.GetRakNetPacket(RakNetProtocol.OfflinePong);
                 pong.Ping = ping.Ping;
                 pong.ServerID = this.ServerID;
-                pong.ServerName = "MCPE;MineNET;261;1.4.2;0;20;MineNET;Survival";
+                pong.ServerName = Server.Instance.ServerList.ToString();
 
                 this.Send(endPoint, pong);
             }

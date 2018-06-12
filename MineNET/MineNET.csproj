@@ -110,6 +110,7 @@
     <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
+    <Compile Include="IServerListInfo.cs" />
     <Compile Include="Network\MinecraftPackets\DisconnectPacket.cs" />
     <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="ResourcePack\ResourcePackInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerConfig.cs" />
+    <Compile Include="ServerListInfo.cs" />
     <Compile Include="ServerStatus.cs" />
     <Compile Include="TranslationMessage.cs" />
     <Compile Include="Utils\Binary.cs" />
