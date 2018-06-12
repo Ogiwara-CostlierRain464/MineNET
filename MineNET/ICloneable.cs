@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MineNET
+﻿namespace System
 {
     public interface ICloneable<T> : ICloneable
     {

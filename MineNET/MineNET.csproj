@@ -115,6 +115,9 @@
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftProtocol.cs" />
     <Compile Include="Network\MinecraftPackets\PlayStatusPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\ResourcePackClientResponsePacket.cs" />
+    <Compile Include="Network\MinecraftPackets\ResourcePacksInfoPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\ResourcePackStackPacket.cs" />
     <Compile Include="Network\RakNetPackets\Ack.cs" />
     <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
     <Compile Include="Network\RakNetPackets\BatchPacket.cs" />
@@ -194,6 +197,8 @@
     <Compile Include="Registry\MinecraftPacketRegistry.cs" />
     <Compile Include="Registry\MineNET_Registries.cs" />
     <Compile Include="Registry\RakNetPacketRegistry.cs" />
+    <Compile Include="ResourcePack\IResourcePack.cs" />
+    <Compile Include="ResourcePack\ResourcePackInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerConfig.cs" />
     <Compile Include="ServerStatus.cs" />

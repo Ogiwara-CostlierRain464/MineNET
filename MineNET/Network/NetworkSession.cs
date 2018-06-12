@@ -297,8 +297,6 @@ namespace MineNET.Network
                 {
                     int len = stream.ReadVarInt();
                     byte[] buffer = stream.ReadBytes(len);
-
-                    OutLog.Info(buffer.Length);
                     using (MinecraftPacket packet = this.Manager.GetMinecraftPacket(buffer[0], buffer))
                     {
                         if (packet != null)

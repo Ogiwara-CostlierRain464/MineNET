@@ -31,6 +31,8 @@ namespace MineNET.Entities.Players
         public Skin Skin { get; private set; }
         public UUID Uuid { get; private set; }
 
+        public bool PackSyncCompleted { get; private set; }
+        public bool HaveAllPacks { get; private set; }
 
         #endregion
 
@@ -80,6 +82,10 @@ namespace MineNET.Entities.Players
             if (packet is LoginPacket)
             {
                 this.HandleLoginPacket((LoginPacket) packet);
+            }
+            else if (packet is ResourcePackClientResponsePacket)
+            {
+                this.HandleResourcePackClientResponsePacket((ResourcePackClientResponsePacket) packet);
             }
         }
 
@@ -131,6 +137,37 @@ namespace MineNET.Entities.Players
             this.IsPreLogined = true;
 
             this.SendPlayStatus(PlayStatusPacket.LOGIN_SUCCESS);
+
+            ResourcePacksInfoPacket info = new ResourcePacksInfoPacket();
+            this.SendPacket(info);
+        }
+
+        public void HandleResourcePackClientResponsePacket(ResourcePackClientResponsePacket pk)
+        {
+            if (this.PackSyncCompleted)
+            {
+                return;
+            }
+
+            if (pk.ResponseStatus == ResourcePackClientResponsePacket.STATUS_REFUSED)
+            {
+                this.Close("disconnectionScreen.resourcePack");
+            }
+            else if (pk.ResponseStatus == ResourcePackClientResponsePacket.STATUS_SEND_PACKS)
+            {
+                //TODO: ResourcePackDataInfoPacket
+            }
+            else if (pk.ResponseStatus == ResourcePackClientResponsePacket.STATUS_HAVE_ALL_PACKS)
+            {
+                ResourcePackStackPacket resourcePackStackPacket = new ResourcePackStackPacket();
+                this.SendPacket(resourcePackStackPacket);
+
+                this.HaveAllPacks = true;
+            }
+            else if (pk.ResponseStatus == ResourcePackClientResponsePacket.STATUS_COMPLETED && this.HaveAllPacks)
+            {
+                OutLog.Info("Logined!");
+            }
         }
         #endregion
 

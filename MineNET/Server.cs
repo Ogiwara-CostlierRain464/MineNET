@@ -152,6 +152,8 @@ namespace MineNET
         {
             this.Clock = new ConstantClockManager();
 
+            MineNET_Registries.Init();
+
             this.Event = new EventManager();
             this.Event.Server.OnServerStart(this, new ServerStartEventArgs());
 
