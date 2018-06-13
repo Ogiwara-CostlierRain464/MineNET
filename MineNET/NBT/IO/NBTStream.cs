@@ -1,7 +1,7 @@
-﻿using System;
-using System.Text;
-using MineNET.NBT.Data;
+﻿using MineNET.NBT.Data;
 using MineNET.Utils;
+using System;
+using System.Text;
 
 namespace MineNET.NBT.IO
 {
@@ -9,14 +9,7 @@ namespace MineNET.NBT.IO
     {
         public const int MAX_CHUNK_SIZE = 512 * 1024 * 1024;
 
-        bool swap;
-        public bool Swap
-        {
-            get
-            {
-                return this.swap;
-            }
-        }
+        public bool Swap { get; set; }
 
         public bool Network { get; set; }
 
@@ -34,14 +27,14 @@ namespace MineNET.NBT.IO
 
         public NBTStream(byte[] buffer, NBTEndian endian)
         {
-            this.swap = (IsBigEndian(endian) == BitConverter.IsLittleEndian);
+            this.Swap = (IsBigEndian(endian) == BitConverter.IsLittleEndian);
             this.WriteBytes(buffer);
             this.Reset();
         }
 
         public new short ReadShort()
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 return (short) this.ReadLShort();
             }
@@ -53,7 +46,7 @@ namespace MineNET.NBT.IO
 
         public new void WriteShort(short value)
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 this.WriteLShort((ushort) value);
             }
@@ -69,7 +62,7 @@ namespace MineNET.NBT.IO
             {
                 return this.ReadSVarInt();
             }
-            if (this.swap)
+            if (this.Swap)
             {
                 return (int) this.ReadLInt();
             }
@@ -86,7 +79,7 @@ namespace MineNET.NBT.IO
                 this.WriteSVarInt(value);
                 return;
             }
-            if (this.swap)
+            if (this.Swap)
             {
                 this.WriteLInt((uint) value);
             }
@@ -102,7 +95,7 @@ namespace MineNET.NBT.IO
             {
                 return this.ReadSVarLong();
             }
-            if (this.swap)
+            if (this.Swap)
             {
                 return (long) this.ReadLLong();
             }
@@ -119,7 +112,7 @@ namespace MineNET.NBT.IO
                 this.WriteSVarLong(value);
                 return;
             }
-            if (this.swap)
+            if (this.Swap)
             {
                 this.WriteLLong((ulong) value);
             }
@@ -131,7 +124,7 @@ namespace MineNET.NBT.IO
 
         public new float ReadFloat()
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 return this.ReadLFloat();
             }
@@ -143,7 +136,7 @@ namespace MineNET.NBT.IO
 
         public new void WriteFloat(float value)
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 this.WriteLFloat(value);
             }
@@ -155,7 +148,7 @@ namespace MineNET.NBT.IO
 
         public new double ReadDouble()
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 return this.ReadLDouble();
             }
@@ -167,7 +160,7 @@ namespace MineNET.NBT.IO
 
         public new void WriteDouble(double value)
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 this.WriteLDouble(value);
             }
@@ -179,7 +172,7 @@ namespace MineNET.NBT.IO
 
         public new int ReadSVarInt()
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 return ~base.ReadSVarInt();
             }
@@ -191,7 +184,7 @@ namespace MineNET.NBT.IO
 
         public new void WriteSVarInt(int value)
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 base.WriteSVarInt(~value);
             }
@@ -203,7 +196,7 @@ namespace MineNET.NBT.IO
 
         public new long ReadSVarLong()
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 return ~base.ReadSVarLong();
             }
@@ -215,7 +208,7 @@ namespace MineNET.NBT.IO
 
         public new void WriteSVarLong(long value)
         {
-            if (this.swap)
+            if (this.Swap)
             {
                 base.WriteSVarLong(~value);
             }

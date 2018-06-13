@@ -16,7 +16,7 @@
             this.Damage = damage;
         }
 
-        public string Name
+        public virtual string Name
         {
             get
             {

@@ -12,7 +12,7 @@ namespace MineNET.Blocks
             this.ID = id;
         }
 
-        public string Name
+        public virtual string Name
         {
             get
             {
