@@ -93,6 +93,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blocks\Block.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandData.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -104,13 +105,53 @@
     <Compile Include="Data\ClientData.cs" />
     <Compile Include="Data\LoginData.cs" />
     <Compile Include="Data\Skin.cs" />
+    <Compile Include="Entities\Attributes\EntityAttribute.cs" />
+    <Compile Include="Entities\Attributes\EntityAttributeDictionary.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Metadata\EntityData.cs" />
+    <Compile Include="Entities\Metadata\EntityDataByte.cs" />
+    <Compile Include="Entities\Metadata\EntityDataFloat.cs" />
+    <Compile Include="Entities\Metadata\EntityDataInt.cs" />
+    <Compile Include="Entities\Metadata\EntityDataLong.cs" />
+    <Compile Include="Entities\Metadata\EntityDataPos.cs" />
+    <Compile Include="Entities\Metadata\EntityDataProperty.cs" />
+    <Compile Include="Entities\Metadata\EntityDataShort.cs" />
+    <Compile Include="Entities\Metadata\EntityDataSlot.cs" />
+    <Compile Include="Entities\Metadata\EntityDataString.cs" />
+    <Compile Include="Entities\Metadata\EntityDataVector.cs" />
+    <Compile Include="Entities\Metadata\EntityMetadataManager.cs" />
+    <Compile Include="Entities\Metadata\EntityMetadataType.cs" />
+    <Compile Include="Entities\Players\PlayerPermissions.cs" />
     <Compile Include="Events\NetworkEvents\NetworkCreateSessionEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkEvent.cs" />
     <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
     <Compile Include="IServerListInfo.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\ItemBlock.cs" />
+    <Compile Include="Items\ItemStack.cs" />
+    <Compile Include="NBT\Data\NBTEndian.cs" />
+    <Compile Include="NBT\Data\NBTTagType.cs" />
+    <Compile Include="NBT\IO\NBTIO.cs" />
+    <Compile Include="NBT\IO\NBTJsonSerializer.cs" />
+    <Compile Include="NBT\IO\NBTStream.cs" />
+    <Compile Include="NBT\Tags\ArrayDataTag.cs" />
+    <Compile Include="NBT\Tags\ByteArrayTag.cs" />
+    <Compile Include="NBT\Tags\ByteTag.cs" />
+    <Compile Include="NBT\Tags\CompoundTag.cs" />
+    <Compile Include="NBT\Tags\DataTag.cs" />
+    <Compile Include="NBT\Tags\DoubleTag.cs" />
+    <Compile Include="NBT\Tags\EndTag.cs" />
+    <Compile Include="NBT\Tags\FloatTag.cs" />
+    <Compile Include="NBT\Tags\IntArrayTag.cs" />
+    <Compile Include="NBT\Tags\IntTag.cs" />
+    <Compile Include="NBT\Tags\ListTag.cs" />
+    <Compile Include="NBT\Tags\LongArrayTag.cs" />
+    <Compile Include="NBT\Tags\LongTag.cs" />
+    <Compile Include="NBT\Tags\ShortTag.cs" />
+    <Compile Include="NBT\Tags\StringTag.cs" />
+    <Compile Include="NBT\Tags\Tag.cs" />
     <Compile Include="Network\MinecraftPackets\DisconnectPacket.cs" />
     <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
@@ -119,6 +160,7 @@
     <Compile Include="Network\MinecraftPackets\ResourcePackClientResponsePacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePacksInfoPacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePackStackPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\StartGamePacket.cs" />
     <Compile Include="Network\RakNetPackets\Ack.cs" />
     <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
     <Compile Include="Network\RakNetPackets\BatchPacket.cs" />
@@ -219,15 +261,24 @@
     <Compile Include="Utils\Config\Yaml\CommentTypeInspector.cs" />
     <Compile Include="Utils\JWT.cs" />
     <Compile Include="Utils\MemorySpan.cs" />
+    <Compile Include="Utils\MineNETMath.cs" />
     <Compile Include="Utils\Random.cs" />
     <Compile Include="Utils\VarInt.cs" />
     <Compile Include="Utils\ZlibStream.cs" />
+    <Compile Include="Values\AxisAlignedBB.cs" />
+    <Compile Include="Values\BlockCoordinate2D.cs" />
+    <Compile Include="Values\BlockCoordinate3D.cs" />
+    <Compile Include="Values\Color.cs" />
     <Compile Include="Values\UUID.cs" />
+    <Compile Include="Values\Vector2.cs" />
+    <Compile Include="Values\Vector3.cs" />
+    <Compile Include="Worlds\GameMode.cs" />
+    <Compile Include="Worlds\GameRule.cs" />
+    <Compile Include="Worlds\GameRuleBase.cs" />
+    <Compile Include="Worlds\GameRules.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Blocks\" />
     <Folder Include="Init\" />
-    <Folder Include="Items\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />

@@ -4,6 +4,7 @@ using MineNET.Network;
 using MineNET.Network.MinecraftPackets;
 using MineNET.Network.RakNetPackets;
 using MineNET.Values;
+using MineNET.Worlds;
 using System;
 using System.Net;
 
@@ -12,7 +13,7 @@ namespace MineNET.Entities.Players
     public class Player : Entity, CommandSender
     {
         #region Property & Field
-        public bool IsPlayer
+        public override bool IsPlayer
         {
             get
             {
@@ -20,20 +21,22 @@ namespace MineNET.Entities.Players
             }
         }
 
-        public string Name { get; set; }
+        public override string Name { get; protected set; }
         public string DisplayName { get; private set; }
 
         public IPEndPoint EndPoint { get; internal set; }
 
         public bool IsPreLogined { get; private set; }
+        public bool IsLogined { get; private set; }
         public LoginData LoginData { get; private set; }
         public ClientData ClientData { get; private set; }
         public Skin Skin { get; private set; }
         public UUID Uuid { get; private set; }
 
+        public GameMode GameMode { get; private set; }
+
         public bool PackSyncCompleted { get; private set; }
         public bool HaveAllPacks { get; private set; }
-
         #endregion
 
         #region Send Message Method
@@ -166,7 +169,32 @@ namespace MineNET.Entities.Players
             }
             else if (pk.ResponseStatus == ResourcePackClientResponsePacket.STATUS_COMPLETED && this.HaveAllPacks)
             {
-                OutLog.Info("Logined!");
+                if (this.IsLogined)
+                {
+                    return;
+                }
+
+                //TODO: Event
+
+                this.IsLogined = true;
+
+                //TODO: Load NBT
+
+                StartGamePacket startGamePacket = new StartGamePacket();
+                startGamePacket.EntityUniqueId = this.EntityID;
+                startGamePacket.EntityRuntimeId = this.EntityID;
+                startGamePacket.PlayerGamemode = this.GameMode;
+                startGamePacket.PlayerPosition = new Vector3(this.X, this.Y, this.Z);
+                startGamePacket.Direction = new Vector2(this.Yaw, this.Pitch);
+                /*.WorldGamemode = this.World.DefaultGameMode.GameModeToInt();
+                startGamePacket.Difficulty = this.World.Difficulty;
+                startGamePacket.SpawnX = this.World.SpawnPoint.FloorX;
+                startGamePacket.SpawnY = this.World.SpawnPoint.FloorY;
+                startGamePacket.SpawnZ = this.World.SpawnPoint.FloorZ;*/
+                startGamePacket.WorldName = "Test";//this.World.Name;
+                this.SendPacket(startGamePacket);
+
+                this.SendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
             }
         }
         #endregion
