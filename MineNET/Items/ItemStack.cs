@@ -7,8 +7,8 @@ namespace MineNET.Items
     public class ItemStack : ICloneable<ItemStack>
     {
         public Item Item { get; }
-        public int Damage { get; set; }
-        public int Count { get; set; }
+        public int Damage { get; set; } = 0;
+        public int Count { get; set; } = 1;
 
         public CompoundTag Tags { get; set; } = null;
         public byte[] BinaryTags { get; } = null;
@@ -16,50 +16,56 @@ namespace MineNET.Items
         public string[] CanPlaceOn { get; private set; } = new string[0];
         public string[] CanDestroy { get; private set; } = new string[0];
 
-        //NBT
-
         public ItemStack(Item item)
         {
             this.Item = item;
             this.Damage = item.Damage;
-            this.Count = 1;
         }
 
-        public ItemStack(Item item, int damage)
+        public ItemStack(Item item, int damage) : this(item)
         {
-            this.Item = item;
             this.Damage = damage;
-            this.Count = 1;
         }
 
-        public ItemStack(Item item, int damage, int count)
+        public ItemStack(Item item, int damage, int count) : this(item, damage)
         {
-            this.Item = item;
-            this.Damage = damage;
             this.Count = count;
         }
 
-        //NBT
+        public ItemStack(Item item, int damage, int count, byte[] nbt) : this(item, damage, count)
+        {
+            this.BinaryTags = nbt;
+        }
+
+        public ItemStack(Item item, int damage, int count, CompoundTag tag) : this(item, damage, count)
+        {
+            this.Tags = tag;
+        }
 
         public ItemStack(Block block)
         {
             this.Item = new ItemBlock(block);
             this.Damage = block.Damage;
-            this.Count = 1;
         }
 
-        public ItemStack(Block block, int damage)
+        public ItemStack(Block block, int damage) : this(block)
         {
-            this.Item = new ItemBlock(block);
             this.Damage = damage;
-            this.Count = 1;
         }
 
-        public ItemStack(Block block, int damage, int count)
+        public ItemStack(Block block, int damage, int count) : this(block, damage)
         {
-            this.Item = new ItemBlock(block);
-            this.Damage = damage;
             this.Count = count;
+        }
+
+        public ItemStack(Block block, int damage, int count, byte[] nbt) : this(block, damage, count)
+        {
+            this.BinaryTags = nbt;
+        }
+
+        public ItemStack(Block block, int damage, int count, CompoundTag tag) : this(block, damage, count)
+        {
+            this.Tags = tag;
         }
 
         public ItemStack Clone()
@@ -72,6 +78,14 @@ namespace MineNET.Items
             return this.MemberwiseClone();
         }
 
-        //NBT
+        public void AddCanPlaceOn(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCanDestroy(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

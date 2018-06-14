@@ -7,7 +7,7 @@ namespace MineNET.Network.RakNetPackets
 {
     public class BatchPacket : RakNetPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.BatchPacket;
+        public override byte MessageID { get; } = RakNetProtocol.BatchPacket;
 
         public byte[] Payload { get; set; } = new byte[0];
         public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Fastest;

@@ -2,7 +2,7 @@
 {
     public class ClientConnectDataPacket : RakNetPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.ClientConnectDataPacket;
+        public override byte MessageID { get; } = RakNetProtocol.ClientConnectDataPacket;
 
         public long ClientID { get; set; }
         public long SendPing { get; set; }

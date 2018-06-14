@@ -2,6 +2,6 @@
 {
     public class Ack : AcknowledgePacket
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.AckPacket;
+        public override byte MessageID { get; } = RakNetProtocol.AckPacket;
     }
 }

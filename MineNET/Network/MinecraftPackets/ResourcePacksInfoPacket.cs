@@ -4,7 +4,7 @@ namespace MineNET.Network.MinecraftPackets
 {
     public class ResourcePacksInfoPacket : MinecraftPacket
     {
-        public override byte PacketID { get; protected set; } = MinecraftProtocol.RESOURCE_PACKS_INFO_PACKET;
+        public override byte PacketID { get; } = MinecraftProtocol.RESOURCE_PACKS_INFO_PACKET;
 
         public bool MustAccept { get; set; } = false;
         public IResourcePack[] BehaviourPackEntries { get; set; } = new IResourcePack[0];

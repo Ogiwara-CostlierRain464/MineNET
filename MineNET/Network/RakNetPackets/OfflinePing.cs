@@ -2,7 +2,7 @@
 {
     public class OfflinePing : OfflineMessage
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.OfflinePing;
+        public override byte MessageID { get; } = RakNetProtocol.OfflinePing;
 
         public long Ping { get; set; }
 

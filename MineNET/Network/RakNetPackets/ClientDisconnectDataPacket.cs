@@ -2,6 +2,6 @@
 {
     public class ClientDisconnectDataPacket : RakNetPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.ClientDisconnectDataPacket;
+        public override byte MessageID { get; } = RakNetProtocol.ClientDisconnectDataPacket;
     }
 }

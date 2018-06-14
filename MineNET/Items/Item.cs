@@ -1,28 +1,45 @@
-﻿namespace MineNET.Items
+﻿using MineNET.Blocks;
+
+namespace MineNET.Items
 {
     public class Item
     {
         public int ID { get; }
         public int Damage { get; }
 
-        public Item(int id)
+        public static Item Get(int id)
         {
+            if (MineNET_Registries.Item.ContainsKey(id))
+            {
+                if (id <= 0xff)
+                {
+                    return new ItemBlock(Block.Get(id));
+                }
+                else
+                {
+                    return MineNET_Registries.Item[id];
+                }
+            }
+            else
+            {
+                return new ItemBlock(Init.BlockInit.In.Air);
+            }
+        }
+
+        public Item(string name, int id)
+        {
+            this.Name = name;
             this.ID = id;
         }
 
-        public Item(int id, int damage)
+        public Item(string name, int id, int damage)
         {
+            this.Name = name;
             this.ID = id;
             this.Damage = damage;
         }
 
-        public virtual string Name
-        {
-            get
-            {
-                return "Unknown";
-            }
-        }
+        public virtual string Name { get; } = "Unknown";
 
         public virtual byte MaxStackSize
         {

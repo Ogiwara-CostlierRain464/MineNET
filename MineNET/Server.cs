@@ -2,6 +2,7 @@
 using MineNET.Entities.Players;
 using MineNET.Events;
 using MineNET.Events.ServerEvents;
+using MineNET.Init;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
@@ -137,6 +138,9 @@ namespace MineNET
                 OutLog.Error(e.ToString());
                 OutLog.Info("%server.stoping");
                 this.Dispose();
+                BlockInit.In.Dispose();
+                ItemInit.In.Dispose();
+
                 this.Status = ServerStatus.Stop;
 
                 //TODO: ServerErrorStopedEvent...
@@ -155,6 +159,8 @@ namespace MineNET
             this.Clock = new ConstantClockManager();
 
             MineNET_Registries.Init();
+            new BlockInit();
+            new ItemInit();
 
             this.Event = new EventManager();
             this.Event.Server.OnServerStart(this, new ServerStartEventArgs());

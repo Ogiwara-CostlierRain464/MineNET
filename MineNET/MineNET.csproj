@@ -94,6 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Blocks\BlockAir.cs" />
+    <Compile Include="Blocks\BlockIDs.cs" />
+    <Compile Include="Blocks\BlockSolid.cs" />
+    <Compile Include="Blocks\BlockTransparent.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandData.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
@@ -127,6 +131,8 @@
     <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
+    <Compile Include="Init\BlockInit.cs" />
+    <Compile Include="Init\ItemInit.cs" />
     <Compile Include="IServerListInfo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemBlock.cs" />
@@ -160,7 +166,9 @@
     <Compile Include="Network\MinecraftPackets\ResourcePackClientResponsePacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePacksInfoPacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePackStackPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\SetEntityDataPacket.cs" />
     <Compile Include="Network\MinecraftPackets\StartGamePacket.cs" />
+    <Compile Include="Network\MinecraftPackets\UpdateAttributesPacket.cs" />
     <Compile Include="Network\RakNetPackets\Ack.cs" />
     <Compile Include="Network\RakNetPackets\AcknowledgePacket.cs" />
     <Compile Include="Network\RakNetPackets\BatchPacket.cs" />
@@ -195,6 +203,7 @@
     <Compile Include="Network\RakNetPackets\ServerHandShakeDataPacket.cs" />
     <Compile Include="Network\RakNetPackets\RakNetPacketReliability.cs" />
     <Compile Include="Network\SessionState.cs" />
+    <Compile Include="Registry\BlockRegistry.cs" />
     <Compile Include="Registry\EntityRegistry.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
@@ -237,6 +246,7 @@
     <Compile Include="Registry\CommandRegistry.cs" />
     <Compile Include="Registry\IDictionaryRegistry.cs" />
     <Compile Include="Registry\IListRegistry.cs" />
+    <Compile Include="Registry\ItemRegistry.cs" />
     <Compile Include="Registry\MinecraftPacketRegistry.cs" />
     <Compile Include="Registry\MineNET_Registries.cs" />
     <Compile Include="Registry\RakNetPacketRegistry.cs" />
@@ -277,9 +287,7 @@
     <Compile Include="Worlds\GameRuleBase.cs" />
     <Compile Include="Worlds\GameRules.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Init\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\Lang\ja_JP.resx" />
   </ItemGroup>

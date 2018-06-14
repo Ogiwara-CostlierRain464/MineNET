@@ -4,7 +4,7 @@ namespace MineNET.Network.RakNetPackets
 {
     public class OpenConnectingRequest2 : OfflineMessage
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.OpenConnectingRequest2;
+        public override byte MessageID { get; } = RakNetProtocol.OpenConnectingRequest2;
 
         public IPEndPoint EndPoint { get; set; }
         public short MTUSize { get; set; }

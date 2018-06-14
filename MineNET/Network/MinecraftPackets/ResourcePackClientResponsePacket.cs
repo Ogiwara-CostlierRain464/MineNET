@@ -2,7 +2,7 @@
 {
     public class ResourcePackClientResponsePacket : MinecraftPacket
     {
-        public override byte PacketID { get; protected set; } = MinecraftProtocol.RESOURCE_PACK_CLIENT_RESPONSE_PACKET;
+        public override byte PacketID { get; } = MinecraftProtocol.RESOURCE_PACK_CLIENT_RESPONSE_PACKET;
 
         public const byte STATUS_REFUSED = 1;
         public const byte STATUS_SEND_PACKS = 2;

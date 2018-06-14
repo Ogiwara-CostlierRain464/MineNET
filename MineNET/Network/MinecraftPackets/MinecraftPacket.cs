@@ -1,16 +1,20 @@
-﻿using MineNET.Data;
+﻿using MineNET.Blocks;
+using MineNET.Data;
 using MineNET.Entities.Attributes;
+using MineNET.Entities.Metadata;
 using MineNET.Items;
 using MineNET.Utils;
 using MineNET.Values;
 using MineNET.Worlds;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MineNET.Network.MinecraftPackets
 {
     public abstract class MinecraftPacket : BinaryStream, ICloneable<MinecraftPacket>
     {
-        public abstract byte PacketID { get; protected set; }
+        public abstract byte PacketID { get; }
 
         public byte Extra1 { get; set; }
         public byte Extra2 { get; set; }
@@ -212,12 +216,12 @@ namespace MineNET.Network.MinecraftPackets
             this.WriteString(skin.GeometryData);
         }
 
-        /*public ItemStack ReadItem()
+        public ItemStack ReadItem()
         {
             int id = this.ReadSVarInt();
             if (id == 0)
             {
-                return new ItemStack(0, 0, 0);
+                return new ItemStack(Item.Get(BlockIDs.AIR), 0, 0);
             }
             int auxValue = this.ReadSVarInt();
             int data = auxValue >> 8;
@@ -234,7 +238,7 @@ namespace MineNET.Network.MinecraftPackets
                 nbt = this.ReadBytes(nbtLen);
             }
 
-            ItemStack item = new ItemStack(id, data, cnt, nbt);
+            ItemStack item = new ItemStack(Item.Get(id), data, cnt, nbt);
 
             int canPlaceOn = this.ReadSVarInt();
             if (canPlaceOn > 0)
@@ -259,15 +263,16 @@ namespace MineNET.Network.MinecraftPackets
 
         public void WriteItem(ItemStack item)
         {
-            if (item == null || item.ID == 0)
+            int id = item.Item.ID;
+            if (item == null || id == 0)
             {
                 this.WriteSVarInt(0);
                 return;
             }
-            this.WriteSVarInt(item.ID);
+            this.WriteSVarInt(id);
             int auxValue = ((item.Damage & 0x7fff) << 8) | (item.Count & 0xff);
             this.WriteSVarInt(auxValue);
-            byte[] nbt = item.Tags;
+            byte[] nbt = item.BinaryTags;
             this.WriteLShort((ushort) nbt.Length);
             this.WriteBytes(nbt);
 
@@ -284,62 +289,58 @@ namespace MineNET.Network.MinecraftPackets
             {
                 this.WriteString(canDestroy[i]);
             }
-        }*/
+        }
 
         //ReadEntityMetadata
 
-        /*public void WriteEntityMetadata(EntityMetadataManager data)
+        public void WriteEntityMetadata(EntityMetadataManager data)
         {
-            using (MCBEBinary stream = new MCBEBinary())
+            Dictionary<int, EntityData> entityDatas = data.GetEntityDatas();
+            this.WriteUVarInt((uint) entityDatas.Count);
+            int[] keys = entityDatas.Keys.ToArray();
+            for (int i = 0; i < keys.Length; ++i)
             {
-                Dictionary<int, EntityData> entityDatas = data.GetEntityDatas();
-                stream.WriteUVarInt((uint) entityDatas.Count);
-                int[] keys = entityDatas.Keys.ToArray();
-                for (int i = 0; i < keys.Length; ++i)
+                int id = keys[i];
+                EntityData entityData = entityDatas[id];
+                EntityMetadataType type = entityData.Type;
+                this.WriteUVarInt((uint) id);
+                this.WriteUVarInt((uint) type);
+                if (type == EntityMetadataType.DATA_TYPE_BYTE)
                 {
-                    int id = keys[i];
-                    EntityData entityData = entityDatas[id];
-                    EntityMetadataType type = entityData.Type;
-                    stream.WriteUVarInt((uint) id);
-                    stream.WriteUVarInt((uint) type);
-                    if (type == EntityMetadataType.DATA_TYPE_BYTE)
-                    {
-                        stream.WriteByte(data.GetByte(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_SHORT)
-                    {
-                        stream.WriteLShort((ushort) data.GetShort(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_INT)
-                    {
-                        stream.WriteSVarInt(data.GetInt(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_FLOAT)
-                    {
-                        stream.WriteLFloat(data.GetFloat(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_STRING)
-                    {
-                        stream.WriteString(data.GetString(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_SLOT)
-                    {
-                        stream.WriteItem(data.GetSlot(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_LONG)
-                    {
-                        stream.WriteSVarLong(data.GetLong(id));
-                    }
-                    else if (type == EntityMetadataType.DATA_TYPE_VECTOR)
-                    {
-                        stream.WriteVector3(data.GetVector(id));
-                    }
+                    this.WriteByte(data.GetByte(id));
                 }
-                this.WriteBytes(stream.ToArray());
+                else if (type == EntityMetadataType.DATA_TYPE_SHORT)
+                {
+                    this.WriteLShort((ushort) data.GetShort(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_INT)
+                {
+                    this.WriteSVarInt(data.GetInt(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_FLOAT)
+                {
+                    this.WriteLFloat(data.GetFloat(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_STRING)
+                {
+                    this.WriteString(data.GetString(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_SLOT)
+                {
+                    this.WriteItem(data.GetSlot(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_LONG)
+                {
+                    this.WriteSVarLong(data.GetLong(id));
+                }
+                else if (type == EntityMetadataType.DATA_TYPE_VECTOR)
+                {
+                    this.WriteVector3(data.GetVector(id));
+                }
             }
         }
 
-        public CommandOriginData ReadCommandOriginData()
+        /*public CommandOriginData ReadCommandOriginData()
         {
             CommandOriginData commandOriginData = new CommandOriginData();
             commandOriginData.Type = this.ReadUVarInt();

@@ -10,7 +10,7 @@ namespace MineNET.Network.MinecraftPackets
 {
     public class LoginPacket : MinecraftPacket
     {
-        public override byte PacketID { get; protected set; } = MinecraftProtocol.LOGIN_PACKET;
+        public override byte PacketID { get; } = MinecraftProtocol.LOGIN_PACKET;
 
         public int Protocol { get; set; }
         public LoginData LoginData { get; set; }

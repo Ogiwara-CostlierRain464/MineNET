@@ -5,7 +5,7 @@ namespace MineNET.Network.RakNetPackets
 {
     public abstract class RakNetPacket : BinaryStream, ICloneable<RakNetPacket>
     {
-        public abstract byte MessageID { get; protected set; }
+        public abstract byte MessageID { get; }
 
         public virtual void Encode()
         {

@@ -1,9 +1,15 @@
-﻿namespace MineNET.Entities
+﻿using MineNET.Entities.Attributes;
+using MineNET.Entities.Metadata;
+
+namespace MineNET.Entities
 {
     public abstract class Entity
     {
+        #region Static Property
         private static long nextEntityId = 0;
+        #endregion
 
+        #region Property & Field
         public abstract string Name { get; protected set; }
 
         public float X { get; set; }
@@ -22,11 +28,18 @@
         public long EntityID { get; }
 
         public virtual bool IsPlayer { get { return false; } }
-        public virtual bool Closed { get; protected set; }
+        public bool Closed { get; protected set; }
+
+        public EntityMetadataManager DataProperties { get; }
+        public EntityAttributeDictionary Attributes { get; }
+        #endregion
 
         public Entity()
         {
             this.EntityID = ++Entity.nextEntityId;
+
+            this.DataProperties = new EntityMetadataManager(this.EntityID);
+            this.Attributes = new EntityAttributeDictionary(this.EntityID);
         }
     }
 }

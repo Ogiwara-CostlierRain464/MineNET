@@ -5,19 +5,19 @@ namespace MineNET
     public static class MineNET_Registries
     {
         //BlockEntity
-        //Block
+        public static BlockRegistry Block { get; } = new BlockRegistry();
         public static CommandRegistry Command { get; } = new CommandRegistry();
         public static EntityRegistry Entity { get; } = new EntityRegistry();
-        //Item
+        public static ItemRegistry Item { get; } = new ItemRegistry();
         public static RakNetPacketRegistry RakNetPacket { get; } = new RakNetPacketRegistry();
         public static MinecraftPacketRegistry MinecraftPacket { get; } = new MinecraftPacketRegistry();
 
         public static void Init()
         {
             //BlockEntity
-            //Block
+            MineNET_Registries.Block.Clear();
             MineNET_Registries.Command.Clear();
-            //Item
+            MineNET_Registries.Item.Clear();
             MineNET_Registries.RakNetPacket.Clear();
             MineNET_Registries.MinecraftPacket.Clear();
         }

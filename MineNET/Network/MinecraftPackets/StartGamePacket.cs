@@ -6,7 +6,7 @@ namespace MineNET.Network.MinecraftPackets
 {
     public class StartGamePacket : MinecraftPacket
     {
-        public override byte PacketID { get; protected set; } = MinecraftProtocol.START_GAME_PACKET;
+        public override byte PacketID { get; } = MinecraftProtocol.START_GAME_PACKET;
 
         public long EntityUniqueId { get; set; }
 

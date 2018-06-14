@@ -1,4 +1,5 @@
 ﻿using MineNET.Entities.Players;
+using MineNET.Network.MinecraftPackets;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace MineNET.Entities.Attributes
 {
     public class EntityAttributeDictionary
     {
-        public Dictionary<string, EntityAttribute> Attributes { get; private set; } = new Dictionary<string, EntityAttribute>();
+        private Dictionary<string, EntityAttribute> Attributes { get; } = new Dictionary<string, EntityAttribute>();
 
         public long EntityID { get; }
 
@@ -41,10 +42,10 @@ namespace MineNET.Entities.Attributes
 
         public void Update(Player player)
         {
-            //UpdateAttributesPacket pk = new UpdateAttributesPacket();
-            //pk.EntityRuntimeId = this.EntityID;
-            //pk.Attributes = this;
-            //player.SendPacket(pk);
+            UpdateAttributesPacket pk = new UpdateAttributesPacket();
+            pk.EntityRuntimeId = this.EntityID;
+            pk.Attributes = this;
+            player.SendPacket(pk);
         }
 
         public EntityAttribute[] ToArray

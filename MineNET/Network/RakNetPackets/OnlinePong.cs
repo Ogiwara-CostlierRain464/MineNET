@@ -2,7 +2,7 @@
 {
     public class OnlinePong : RakNetPacket
     {
-        public override byte MessageID { get; protected set; } = RakNetProtocol.OnlinePong;
+        public override byte MessageID { get; } = RakNetProtocol.OnlinePong;
 
         public long PingID { get; set; }
 

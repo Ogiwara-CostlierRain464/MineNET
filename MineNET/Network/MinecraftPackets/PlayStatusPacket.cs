@@ -11,7 +11,7 @@
         public const int LOGIN_FAILED_EDU_VANILLA = 6;
         public const int LOGIN_FAILED_SERVER_FULL = 7;
 
-        public override byte PacketID { get; protected set; } = MinecraftProtocol.PLAY_STATUS_PACKET;
+        public override byte PacketID { get; } = MinecraftProtocol.PLAY_STATUS_PACKET;
 
         public int Status { get; set; }
 
