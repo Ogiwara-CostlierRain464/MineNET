@@ -194,9 +194,17 @@ namespace MineNET.Network
                         pk.Dispose();
                         return;
                     }
+
+                    if (pk is AcknowledgePacket)
+                    {
+                        NetworkSession session = this.GetSession(endPoint);
+                        session.HandleAcknowledgePacket((AcknowledgePacket) pk);
+                        pk.Dispose();
+                        return;
+                    }
                 }
 
-                OutLog.Log("%server.network.raknet.notHandle", msgId);
+                OutLog.Log("%server.network.raknet.notHandle", msgId.ToString("X"));
             }
         }
 

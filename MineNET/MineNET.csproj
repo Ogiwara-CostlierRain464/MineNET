@@ -136,6 +136,7 @@
     <Compile Include="IServerListInfo.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemBlock.cs" />
+    <Compile Include="Items\ItemIDs.cs" />
     <Compile Include="Items\ItemStack.cs" />
     <Compile Include="NBT\Data\NBTEndian.cs" />
     <Compile Include="NBT\Data\NBTTagType.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="NBT\Tags\StringTag.cs" />
     <Compile Include="NBT\Tags\Tag.cs" />
     <Compile Include="Network\MinecraftPackets\DisconnectPacket.cs" />
+    <Compile Include="Network\MinecraftPackets\FullChunkDataPacket.cs" />
     <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftProtocol.cs" />
@@ -257,6 +259,7 @@
     <Compile Include="ServerListInfo.cs" />
     <Compile Include="ServerStatus.cs" />
     <Compile Include="TranslationMessage.cs" />
+    <Compile Include="Utils\ArrayUtils.cs" />
     <Compile Include="Utils\Binary.cs" />
     <Compile Include="Utils\BinaryStream.cs" />
     <Compile Include="Utils\ColorText.cs" />
@@ -282,10 +285,12 @@
     <Compile Include="Values\UUID.cs" />
     <Compile Include="Values\Vector2.cs" />
     <Compile Include="Values\Vector3.cs" />
+    <Compile Include="Worlds\Chunk.cs" />
     <Compile Include="Worlds\GameMode.cs" />
     <Compile Include="Worlds\GameRule.cs" />
     <Compile Include="Worlds\GameRuleBase.cs" />
     <Compile Include="Worlds\GameRules.cs" />
+    <Compile Include="Worlds\SubChunk.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

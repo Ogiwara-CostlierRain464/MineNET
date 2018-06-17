@@ -33,7 +33,7 @@ namespace MineNET.Network
         public ConcurrentDictionary<int, DataPacket> PacketToSend { get; private set; } = new ConcurrentDictionary<int, DataPacket>();
 
         public int WindowStart { get; private set; }
-        public int WindowEnd { get; private set; }
+        public int WindowEnd { get; private set; } = NetworkSession.WindowSize;
         public ConcurrentDictionary<int, int> ReceivedWindow { get; private set; } = new ConcurrentDictionary<int, int>();
 
         public int LastSeqNumber { get; private set; } = -1;
@@ -46,7 +46,7 @@ namespace MineNET.Network
         public Dictionary<int, Dictionary<int, EncapsulatedPacket>> SplitPackets { get; set; } = new Dictionary<int, Dictionary<int, EncapsulatedPacket>>();
 
         public int ReliableWindowStart { get; private set; }
-        public int ReliableWindowEnd { get; private set; }
+        public int ReliableWindowEnd { get; private set; } = NetworkSession.WindowSize;
         public ConcurrentDictionary<int, bool> ReliableWindow { get; private set; } = new ConcurrentDictionary<int, bool>();
 
         public SessionState State { get; private set; } = SessionState.Connecting;
@@ -62,8 +62,6 @@ namespace MineNET.Network
             this.MTUSize = mtuSize;
 
             this.LastUpdateTime = NetworkSession.TimedOutTime;
-
-            this.WindowEnd = NetworkSession.WindowSize;
         }
         #endregion
 
@@ -84,6 +82,7 @@ namespace MineNET.Network
                 {
                     pks.Add(kv.Value);
                 }
+                pks.Sort();
                 pk.Packets = pks.ToArray();
                 this.SendPacket(pk);
 
@@ -98,6 +97,7 @@ namespace MineNET.Network
                 {
                     pks.Add(kv.Value);
                 }
+                pks.Sort();
                 pk.Packets = pks.ToArray();
                 this.SendPacket(pk);
 
@@ -110,7 +110,7 @@ namespace MineNET.Network
                 foreach (KeyValuePair<int, DataPacket> packet in this.PacketToSend)
                 {
                     DataPacket pk = null;
-                    //sendEncapsulated
+                    this.SendDatagram(packet.Value);
                     this.PacketToSend.TryRemove(packet.Key, out pk);
 
                     if (--limit <= 0)
@@ -202,7 +202,7 @@ namespace MineNET.Network
                         bool v;
                         this.ReliableWindow.TryRemove(this.ReliableWindowStart, out v);
 
-                        this.ReliableWindowEnd++;
+                        ++this.ReliableWindowEnd;
                     }
                 }
 
@@ -316,7 +316,7 @@ namespace MineNET.Network
                         }
                         else
                         {
-                            //OutLog.Log("%server_packet_notHandle", buffer[0].ToString("X"), buffer.Length);
+                            OutLog.Log(buffer[0].ToString("X"));
                         }
                     }
                 }
@@ -366,7 +366,7 @@ namespace MineNET.Network
             return null;
         }
 
-        public void HandleAcknowledgePacket()
+        public void HandleAcknowledgePacket(AcknowledgePacket packet)
         {
 
         }

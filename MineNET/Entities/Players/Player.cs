@@ -1,11 +1,14 @@
 ﻿using MineNET.Commands;
 using MineNET.Data;
+using MineNET.Entities.Attributes;
 using MineNET.Network;
 using MineNET.Network.MinecraftPackets;
 using MineNET.Network.RakNetPackets;
 using MineNET.Values;
 using MineNET.Worlds;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace MineNET.Entities.Players
@@ -22,7 +25,7 @@ namespace MineNET.Entities.Players
         }
 
         public override string Name { get; protected set; }
-        public string DisplayName { get; private set; }
+        public new string DisplayName { get; private set; }
 
         public IPEndPoint EndPoint { get; internal set; }
 
@@ -38,6 +41,20 @@ namespace MineNET.Entities.Players
         public bool PackSyncCompleted { get; private set; }
         public bool HaveAllPacks { get; private set; }
         #endregion
+
+        protected override void EntityInit()
+        {
+            base.EntityInit();
+
+            this.Attributes.AddAttribute(EntityAttribute.HUNGER);
+            this.Attributes.AddAttribute(EntityAttribute.SATURATION);
+            this.Attributes.AddAttribute(EntityAttribute.EXHAUSTION);
+            this.Attributes.AddAttribute(EntityAttribute.EXPERIENCE);
+            this.Attributes.AddAttribute(EntityAttribute.EXPERIENCE_LEVEL);
+
+            this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_BREATHING);
+            this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_CAN_CLIMB);
+        }
 
         #region Send Message Method
         public void SendMessage(TranslationMessage message)
@@ -183,18 +200,51 @@ namespace MineNET.Entities.Players
                 StartGamePacket startGamePacket = new StartGamePacket();
                 startGamePacket.EntityUniqueId = this.EntityID;
                 startGamePacket.EntityRuntimeId = this.EntityID;
-                startGamePacket.PlayerGamemode = this.GameMode;
+                startGamePacket.PlayerGamemode = GameMode.Creative;
                 startGamePacket.PlayerPosition = new Vector3(this.X, this.Y, this.Z);
                 startGamePacket.Direction = new Vector2(this.Yaw, this.Pitch);
-                /*.WorldGamemode = this.World.DefaultGameMode.GameModeToInt();
-                startGamePacket.Difficulty = this.World.Difficulty;
-                startGamePacket.SpawnX = this.World.SpawnPoint.FloorX;
-                startGamePacket.SpawnY = this.World.SpawnPoint.FloorY;
-                startGamePacket.SpawnZ = this.World.SpawnPoint.FloorZ;*/
+                startGamePacket.WorldGamemode = this.GameMode.GameModeToInt();//this.World.DefaultGameMode.GameModeToInt();
+                startGamePacket.Difficulty = 1;
+                startGamePacket.SpawnX = 128;
+                startGamePacket.SpawnY = 5;
+                startGamePacket.SpawnZ = 128;
                 startGamePacket.WorldName = "Test";//this.World.Name;
+                startGamePacket.PlayerPosition = new Vector3(128, 5, 128);
+                startGamePacket.Direction = new Vector2(this.Yaw, this.Pitch);
+                startGamePacket.GameRules = new GameRules();
+                startGamePacket.GameRules.Add(new GameRule<bool>("ShowCoordinates", true));
                 this.SendPacket(startGamePacket);
 
+                Dictionary<Tuple<int, int>, double> newOrders = new Dictionary<Tuple<int, int>, double>();
+                int radius = 16;
+                double radiusSquared = Math.Pow(radius, 2);
+                Vector2 center = new Vector2(128 >> 4, 128 >> 4);
+
+                for (int x = -radius; x <= radius; ++x)
+                {
+                    for (int z = -radius; z <= radius; ++z)
+                    {
+                        int distance = (x * x) + (z * z);
+                        if (distance > radiusSquared)
+                        {
+                            continue;
+                        }
+                        int chunkX = (int) (x + center.X);
+                        int chunkZ = (int) (z + center.Y);
+                        Tuple<int, int> index = new Tuple<int, int>(chunkX, chunkZ);
+                        newOrders[index] = distance;
+                    }
+                }
+
+                foreach (var pair in newOrders.OrderBy(pair => pair.Value))
+                {
+                    Chunk c = new Chunk(pair.Key.Item1, pair.Key.Item2);
+                    c.SendChunk(this);
+                }
+
                 this.SendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
+
+                this.SendDataProperties();
             }
         }
         #endregion
