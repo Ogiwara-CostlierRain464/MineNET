@@ -4,8 +4,8 @@ namespace MineNET.Events.NetworkEvents
 {
     public sealed class NetworkEvent
     {
-        public event EventHandler<NetworkPacketReceiveEventArgs> NetworkPacketReceive;
-        internal void OnNetworkPacketReceive(object sender, NetworkPacketReceiveEventArgs e)
+        public event EventHandler<NetworkRakNetPacketReceiveEventArgs> NetworkPacketReceive;
+        internal void OnNetworkPacketReceive(object sender, NetworkRakNetPacketReceiveEventArgs e)
         {
             this.NetworkPacketReceive?.Invoke(sender, e);
         }

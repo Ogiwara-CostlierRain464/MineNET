@@ -373,6 +373,8 @@ namespace MineNET.Entities
         #region Init Method
         protected virtual void EntityInit()
         {
+
+
             this.SetDataProperty(new EntityDataLong(Entity.DATA_FLAGS, 0));
             this.SetDataProperty(new EntityDataShort(Entity.DATA_AIR, 400));
             this.SetDataProperty(new EntityDataShort(Entity.DATA_MAX_AIR, 400));

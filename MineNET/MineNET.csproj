@@ -129,7 +129,7 @@
     <Compile Include="Events\NetworkEvents\NetworkCreateSessionEventArgs.cs" />
     <Compile Include="Events\NetworkEvents\NetworkEvent.cs" />
     <Compile Include="Events\NetworkEvents\NetworkEventArgs.cs" />
-    <Compile Include="Events\NetworkEvents\NetworkPacketReceiveEventArgs.cs" />
+    <Compile Include="Events\NetworkEvents\NetworkRakNetPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
     <Compile Include="Init\BlockInit.cs" />
     <Compile Include="Init\ItemInit.cs" />

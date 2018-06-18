@@ -46,6 +46,11 @@ namespace MineNET.Entities.Players
         {
             base.EntityInit();
 
+            this.Attributes.AddAttribute(EntityAttribute.HEALTH);
+            this.Attributes.AddAttribute(EntityAttribute.ABSORPTION);
+            this.Attributes.AddAttribute(EntityAttribute.KNOCKBACK_RESISTANCE);
+            this.Attributes.AddAttribute(EntityAttribute.MOVEMENT_SPEED);
+
             this.Attributes.AddAttribute(EntityAttribute.HUNGER);
             this.Attributes.AddAttribute(EntityAttribute.SATURATION);
             this.Attributes.AddAttribute(EntityAttribute.EXHAUSTION);
@@ -245,6 +250,7 @@ namespace MineNET.Entities.Players
                 this.SendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
 
                 this.SendDataProperties();
+                this.Attributes.Update(this);
             }
         }
         #endregion

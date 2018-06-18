@@ -160,7 +160,7 @@ namespace MineNET.Network
                 RakNetPacket pk = this.GetRakNetPacket(msgId, bytes);
                 if (pk != null)
                 {
-                    NetworkPacketReceiveEventArgs ev = new NetworkPacketReceiveEventArgs(endPoint, pk);
+                    NetworkRakNetPacketReceiveEventArgs ev = new NetworkRakNetPacketReceiveEventArgs(endPoint, pk);
                     Server.Instance.Event.Network.OnNetworkPacketReceive(this, ev);
 
                     if (ev.IsCancel)

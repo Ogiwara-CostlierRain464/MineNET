@@ -42,12 +42,15 @@ namespace MineNET.Network
         public int OrderIndex { get; private set; }
 
         public BatchPacket BatchPacketQueue { get; private set; } = new BatchPacket();
-        public DataPacket SendQueue = new DataPacket4();
+        public DataPacket SendQueue { get; private set; } = new DataPacket4();
         public Dictionary<int, Dictionary<int, EncapsulatedPacket>> SplitPackets { get; set; } = new Dictionary<int, Dictionary<int, EncapsulatedPacket>>();
 
         public int ReliableWindowStart { get; private set; }
         public int ReliableWindowEnd { get; private set; } = NetworkSession.WindowSize;
         public ConcurrentDictionary<int, bool> ReliableWindow { get; private set; } = new ConcurrentDictionary<int, bool>();
+
+        public ConcurrentDictionary<int, DataPacket> SendedPacket { get; private set; } = new ConcurrentDictionary<int, DataPacket>();
+        public Queue<DataPacket> ResendQueue { get; set; } = new Queue<DataPacket>();
 
         public SessionState State { get; private set; } = SessionState.Connecting;
         #endregion
@@ -104,24 +107,15 @@ namespace MineNET.Network
                 this.NACKQueue.Clear();
             }
 
-            if (this.PacketToSend.Count > 0)
+            if (this.ResendQueue.Count > 0)
             {
-                int limit = 16;
-                foreach (KeyValuePair<int, DataPacket> packet in this.PacketToSend)
+                for (int i = 0; i < this.ResendQueue.Count; ++i)
                 {
-                    DataPacket pk = null;
-                    this.SendDatagram(packet.Value);
-                    this.PacketToSend.TryRemove(packet.Key, out pk);
+                    DataPacket pk = this.ResendQueue.Dequeue();
+                    pk.SeqNumber = this.LastSeqNumber++;
+                    this.SendPacket(pk);
 
-                    if (--limit <= 0)
-                    {
-                        break;
-                    }
-                }
-
-                if (this.PacketToSend.Count > NetworkSession.WindowSize)
-                {
-                    this.PacketToSend.Clear();
+                    OutLog.Info("Resend");
                 }
             }
 
@@ -316,7 +310,7 @@ namespace MineNET.Network
                         }
                         else
                         {
-                            OutLog.Log(buffer[0].ToString("X"));
+                            //OutLog.Log(buffer[0].ToString("X"));
                         }
                     }
                 }
@@ -368,7 +362,27 @@ namespace MineNET.Network
 
         public void HandleAcknowledgePacket(AcknowledgePacket packet)
         {
-
+            if (packet is Ack)
+            {
+                foreach (int p in packet.Packets)
+                {
+                    DataPacket pk;
+                    this.SendedPacket.TryRemove(p, out pk);
+                }
+            }
+            else if (packet is Nack)
+            {
+                foreach (int p in packet.Packets)
+                {
+                    if (this.SendedPacket.ContainsKey(p))
+                    {
+                        DataPacket pk = this.SendedPacket[p];
+                        DataPacket remove;
+                        this.SendedPacket.TryRemove(p, out remove);
+                        this.ResendQueue.Enqueue(pk);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -388,7 +402,7 @@ namespace MineNET.Network
             if (packet.GetTotalLength() + 4 > this.MTUSize)
             {
                 byte[][] buffers = Binary.SplitBytes(new MemorySpan(packet.Buffer), this.MTUSize - 60);
-                int splitID = this.SplitID++ % 65536;
+                int splitID = ++this.SplitID % 65536;
                 for (int i = 0; i < buffers.Length; ++i)
                 {
                     EncapsulatedPacket pk = new EncapsulatedPacket();
@@ -494,11 +508,11 @@ namespace MineNET.Network
         {
             if (pk.SeqNumber != -1)
             {
-                //this.RecoveryQueue.Remove(pk.SeqNumber);
+                //this.SendedPacket.TryAdd(pk.SeqNumber, (DataPacket) pk.Clone());
             }
 
             pk.SeqNumber = this.LastSeqNumber++;
-            //this.RecoveryQueue[pk.SeqNumber] = pk;
+            this.SendedPacket.TryAdd(pk.SeqNumber, (DataPacket) pk.Clone());
             this.SendPacket(pk);
 
         }
