@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MineNET.Worlds
+namespace MineNET.Worlds.Rule
 {
     public class GameRules : ICollection<GameRuleBase>, ICollection
     {

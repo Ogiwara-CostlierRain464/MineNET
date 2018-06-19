@@ -5,16 +5,11 @@ namespace MineNET.Worlds
 {
     public class SubChunk
     {
-        public byte[] BlockDatas { get; set; } = ArrayUtils.CreateArray<byte>(4096, 9);
+        public byte[] BlockDatas { get; set; } = ArrayUtils.CreateArray<byte>(4096, 0);
         public NibbleArray MetaDatas { get; set; } = ArrayUtils.CreateNibbleArray(4096, 0);
 
         public NibbleArray SkyLights { get; set; } = ArrayUtils.CreateNibbleArray(4096, 0xff);
         public NibbleArray BlockLigths { get; set; } = ArrayUtils.CreateNibbleArray(4096, 0);
-
-        public SubChunk()
-        {
-            //this.SetBlock(8, 8, 8, 1);
-        }
 
         public bool IsEnpty
         {
@@ -54,8 +49,6 @@ namespace MineNET.Worlds
 
         public byte[] GetBytes()
         {
-            this.SetBlock(8, 8, 8, 9);
-
             using (BinaryStream bs = new BinaryStream())
             {
                 bs.WriteByte(0);

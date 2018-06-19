@@ -31,12 +31,12 @@
             return GameMode.Survival;
         }
 
-        public static int GameModeToInt(this GameMode gameMode)
+        public static int GetIndex(this GameMode gameMode)
         {
             return (int) gameMode;
         }
 
-        public static string GameModeToString(this GameMode gameMode)
+        public static string GetGameModeString(this GameMode gameMode)
         {
             if (gameMode == GameMode.Survival)
             {

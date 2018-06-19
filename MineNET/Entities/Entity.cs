@@ -1,6 +1,7 @@
 ﻿using MineNET.Entities.Attributes;
 using MineNET.Entities.Metadata;
 using MineNET.Entities.Players;
+using MineNET.Worlds;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -333,15 +334,17 @@ namespace MineNET.Entities
         #region Property & Field
         public abstract string Name { get; protected set; }
 
+        public float Width { get; private set; }
+        public float Height { get; private set; }
+
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
 
+        public World World { get; protected set; }
+
         public float Yaw { get; set; }
         public float Pitch { get; set; }
-
-        public float WIDTH { get; private set; }
-        public float HEIGHT { get; private set; }
 
         public float HeadYaw { get; set; }
 
@@ -381,8 +384,8 @@ namespace MineNET.Entities
             this.SetDataProperty(new EntityDataString(Entity.DATA_NAMETAG, ""));
             this.SetDataProperty(new EntityDataLong(Entity.DATA_LEAD_HOLDER_EID, -1));
             this.SetDataProperty(new EntityDataFloat(Entity.DATA_SCALE, 1.0f));
-            this.SetDataProperty(new EntityDataFloat(Entity.DATA_BOUNDING_BOX_WIDTH, this.WIDTH));
-            this.SetDataProperty(new EntityDataFloat(Entity.DATA_BOUNDING_BOX_HEIGHT, this.HEIGHT));
+            this.SetDataProperty(new EntityDataFloat(Entity.DATA_BOUNDING_BOX_WIDTH, this.Width));
+            this.SetDataProperty(new EntityDataFloat(Entity.DATA_BOUNDING_BOX_HEIGHT, this.Height));
 
             this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_HAS_COLLISION);
             this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_AFFECTED_BY_GRAVITY);

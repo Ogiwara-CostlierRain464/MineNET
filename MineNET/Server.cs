@@ -6,6 +6,7 @@ using MineNET.Init;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
+using MineNET.Worlds;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,6 +43,9 @@ namespace MineNET
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
         public IPEndPoint EndPoint { get; set; }
+
+        public World MainWorld { get; private set; }
+        public List<World> SubWorlds { get; } = new List<World>();
         #endregion
 
         #region Ctor
@@ -161,6 +165,8 @@ namespace MineNET
             MineNET_Registries.Init();
             new BlockInit();
             new ItemInit();
+
+            this.MainWorld = new World();
 
             this.Event = new EventManager();
             this.Event.Server.OnServerStart(this, new ServerStartEventArgs());

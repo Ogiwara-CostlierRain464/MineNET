@@ -1,4 +1,4 @@
-﻿namespace MineNET.Worlds
+﻿namespace MineNET.Worlds.Rule
 {
     public class GameRule<T> : GameRuleBase
     {

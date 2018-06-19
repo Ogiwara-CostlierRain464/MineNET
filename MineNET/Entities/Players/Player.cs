@@ -6,6 +6,7 @@ using MineNET.Network.MinecraftPackets;
 using MineNET.Network.RakNetPackets;
 using MineNET.Values;
 using MineNET.Worlds;
+using MineNET.Worlds.Rule;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace MineNET.Entities.Players
         public Skin Skin { get; private set; }
         public UUID Uuid { get; private set; }
 
-        public GameMode GameMode { get; private set; }
+        public GameMode GameMode { get; private set; } = GameMode.Survival;
 
         public bool PackSyncCompleted { get; private set; }
         public bool HaveAllPacks { get; private set; }
@@ -202,20 +203,22 @@ namespace MineNET.Entities.Players
 
                 //TODO: Load NBT
 
+                this.World = Server.Instance.MainWorld;
+
                 StartGamePacket startGamePacket = new StartGamePacket();
                 startGamePacket.EntityUniqueId = this.EntityID;
                 startGamePacket.EntityRuntimeId = this.EntityID;
-                startGamePacket.PlayerGamemode = GameMode.Creative;
-                startGamePacket.PlayerPosition = new Vector3(this.X, this.Y, this.Z);
+                startGamePacket.PlayerGamemode = this.GameMode;
+                startGamePacket.PlayerPosition = new Vector3(128, 5, 128);//new Vector3(this.X, this.Y, this.Z);
                 startGamePacket.Direction = new Vector2(this.Yaw, this.Pitch);
-                startGamePacket.WorldGamemode = this.GameMode.GameModeToInt();//this.World.DefaultGameMode.GameModeToInt();
-                startGamePacket.Difficulty = 1;
-                startGamePacket.SpawnX = 128;
-                startGamePacket.SpawnY = 5;
-                startGamePacket.SpawnZ = 128;
-                startGamePacket.WorldName = "Test";//this.World.Name;
-                startGamePacket.PlayerPosition = new Vector3(128, 5, 128);
-                startGamePacket.Direction = new Vector2(this.Yaw, this.Pitch);
+
+                startGamePacket.WorldGamemode = this.World.Gamemode;
+                startGamePacket.Difficulty = this.World.Difficulty;
+                startGamePacket.SpawnX = this.World.SpawnX;
+                startGamePacket.SpawnY = 5;//TODO: Safe Spawn
+                startGamePacket.SpawnZ = this.World.SpawnZ;
+                startGamePacket.WorldName = this.World.Name;
+
                 startGamePacket.GameRules = new GameRules();
                 startGamePacket.GameRules.Add(new GameRule<bool>("ShowCoordinates", true));
                 this.SendPacket(startGamePacket);
@@ -244,6 +247,13 @@ namespace MineNET.Entities.Players
                 foreach (var pair in newOrders.OrderBy(pair => pair.Value))
                 {
                     Chunk c = new Chunk(pair.Key.Item1, pair.Key.Item2);
+                    for (int i = 0; i < 16; ++i)
+                    {
+                        for (int k = 0; k < 16; ++k)
+                        {
+                            c.SetBlock(i, 0, k, 20);
+                        }
+                    }
                     c.SendChunk(this);
                 }
 

@@ -286,11 +286,15 @@
     <Compile Include="Values\Vector2.cs" />
     <Compile Include="Values\Vector3.cs" />
     <Compile Include="Worlds\Chunk.cs" />
+    <Compile Include="Worlds\Difficulty.cs" />
+    <Compile Include="Worlds\Dimensions\DimensionID.cs" />
     <Compile Include="Worlds\GameMode.cs" />
-    <Compile Include="Worlds\GameRule.cs" />
-    <Compile Include="Worlds\GameRuleBase.cs" />
-    <Compile Include="Worlds\GameRules.cs" />
+    <Compile Include="Worlds\Generators\GeneratorID.cs" />
+    <Compile Include="Worlds\Rule\GameRule.cs" />
+    <Compile Include="Worlds\Rule\GameRuleBase.cs" />
+    <Compile Include="Worlds\Rule\GameRules.cs" />
     <Compile Include="Worlds\SubChunk.cs" />
+    <Compile Include="Worlds\World.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

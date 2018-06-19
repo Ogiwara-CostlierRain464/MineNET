@@ -1,6 +1,9 @@
 ﻿using MineNET.Entities.Players;
 using MineNET.Values;
 using MineNET.Worlds;
+using MineNET.Worlds.Dimensions;
+using MineNET.Worlds.Generators;
+using MineNET.Worlds.Rule;
 
 namespace MineNET.Network.MinecraftPackets
 {
@@ -16,11 +19,11 @@ namespace MineNET.Network.MinecraftPackets
         public Vector3 PlayerPosition { get; set; }
         public Vector2 Direction { get; set; }
 
-        public int Seed { get; set; } = 0;
-        public byte Dimension { get; set; } = 0;
-        public int Generator { get; set; } = 1;
-        public int WorldGamemode { get; set; }
-        public int Difficulty { get; set; }
+        public int Seed { get; set; } = -1;
+        public byte Dimension { get; set; } = DimensionID.OverWorld;
+        public int Generator { get; set; } = GeneratorID.Infinite;
+        public GameMode WorldGamemode { get; set; } = GameMode.Survival;
+        public Difficulty Difficulty { get; set; } = Difficulty.Normal;
 
         public int SpawnX { get; set; }
         public int SpawnY { get; set; }
@@ -73,14 +76,14 @@ namespace MineNET.Network.MinecraftPackets
 
             this.WriteEntityUniqueId(this.EntityUniqueId);
             this.WriteEntityRuntimeId(this.EntityRuntimeId);
-            this.WriteSVarInt(this.PlayerGamemode.GameModeToInt());
+            this.WriteSVarInt(this.PlayerGamemode.GetIndex());
             this.WriteVector3(this.PlayerPosition);
             this.WriteVector2(this.Direction);
             this.WriteSVarInt(this.Seed);
             this.WriteSVarInt(this.Dimension);
             this.WriteSVarInt(this.Generator);
-            this.WriteSVarInt(this.WorldGamemode);
-            this.WriteSVarInt(this.Difficulty);
+            this.WriteSVarInt(this.WorldGamemode.GetIndex());
+            this.WriteSVarInt(this.Difficulty.GetIndex());
             this.WriteBlockVector3(this.SpawnX, this.SpawnY, this.SpawnZ);
             this.WriteBool(this.HasAchievementsDisabled);
             this.WriteSVarInt(this.DayCycleStopTime);
