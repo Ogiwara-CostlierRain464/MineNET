@@ -3,33 +3,9 @@ using System;
 
 namespace MineNET.TestPlugin
 {
-    public class TestPlugin : IPlugin
+    public class TestPlugin : PluginBase
     {
-        public ApiVersion ApiVersion
-        {
-            get
-            {
-                return ApiVersion.Version_1_0_0_0;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return "MineNET Test Plugin.";
-            }
-        }
-
-        public PluginFlags Flag
-        {
-            get
-            {
-                return PluginFlags.Plugin;
-            }
-        }
-
-        public string Name
+        public override string Name
         {
             get
             {
@@ -37,28 +13,20 @@ namespace MineNET.TestPlugin
             }
         }
 
-        public string[] PremisePlugins
+        public override string Description
         {
             get
             {
-                return null;
+                return "MineNET Test Plugin.";
             }
         }
 
-        public string Version
-        {
-            get
-            {
-                return "1.0.0.0";
-            }
-        }
-
-        public void OnDisable()
+        public override void OnDisable()
         {
             OutLog.Info("Goodbye MineNET plugin!");
         }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
             OutLog.Info("Hello MineNET plugin!");
             Server.Instance.Event.Server.ServerCommand += Server_ServerCommand;
@@ -72,12 +40,12 @@ namespace MineNET.TestPlugin
             }
         }
 
-        public void OnError(Exception e)
+        public override void OnError(Exception e)
         {
 
         }
 
-        public void OnLoad()
+        public override void OnLoad()
         {
             OutLog.Info("Good morning MineNET plugin!");
         }

@@ -8,7 +8,7 @@ namespace MineNET.Plugins
         None = 0,
         Plugin = 1,
         Library = 2,
-        Package,
+        Package = PluginFlags.Plugin | PluginFlags.Library,
         ApiVersionCheck = 4,
         UsePremisePlugins = 8,
         Fast = 16,
