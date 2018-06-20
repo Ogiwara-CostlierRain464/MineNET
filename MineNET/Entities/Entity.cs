@@ -1,6 +1,6 @@
-﻿using MineNET.Entities.Attributes;
-using MineNET.Entities.Metadata;
+﻿using MineNET.Entities.Metadata;
 using MineNET.Entities.Players;
+using MineNET.NBT.Tags;
 using MineNET.Worlds;
 using System;
 using System.Collections;
@@ -357,18 +357,21 @@ namespace MineNET.Entities
         public virtual bool IsPlayer { get { return false; } }
         public bool Closed { get; protected set; }
 
-        public EntityMetadataManager DataProperties { get; }
-        public EntityAttributeDictionary Attributes { get; }
+        public CompoundTag NamedTag { get; }
+        public EntityMetadataManager DataProperties { get; private set; }
         #endregion
 
         #region Ctor
-        public Entity()
+        public Entity(World world, CompoundTag tag)
         {
             this.EntityID = ++Entity.nextEntityId;
 
-            this.DataProperties = new EntityMetadataManager(this.EntityID);
-            this.Attributes = new EntityAttributeDictionary(this.EntityID);
 
+            if (!this.IsPlayer)
+            {
+                this.World = world;
+            }
+            this.NamedTag = tag;
             this.EntityInit();
         }
         #endregion
@@ -376,8 +379,7 @@ namespace MineNET.Entities
         #region Init Method
         protected virtual void EntityInit()
         {
-
-
+            this.DataProperties = new EntityMetadataManager(this.EntityID);
             this.SetDataProperty(new EntityDataLong(Entity.DATA_FLAGS, 0));
             this.SetDataProperty(new EntityDataShort(Entity.DATA_AIR, 400));
             this.SetDataProperty(new EntityDataShort(Entity.DATA_MAX_AIR, 400));

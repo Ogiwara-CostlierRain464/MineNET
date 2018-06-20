@@ -127,7 +127,7 @@ namespace MineNET.Network
             //19
             //1A
             //1B
-            //1C
+            MineNET_Registries.MinecraftPacket.Add(MinecraftProtocol.MOB_EFFECT_PACKET, new MobEffectPacket());
             MineNET_Registries.MinecraftPacket.Add(MinecraftProtocol.UPDATE_ATTRIBUTES_PACKET, new UpdateAttributesPacket());
             //1E
             //1F

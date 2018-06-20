@@ -13,7 +13,7 @@ namespace MineNET.Registry
         {
             get
             {
-                return this.Dictionary[key];
+                return this.Dictionary[key].Clone();
             }
 
             set
@@ -101,7 +101,9 @@ namespace MineNET.Registry
 
         public bool TryGetValue(int key, out Block value)
         {
-            return this.Dictionary.TryGetValue(key, out value);
+            bool result = this.Dictionary.TryGetValue(key, out value);
+            value = value.Clone();
+            return result;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

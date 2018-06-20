@@ -167,6 +167,7 @@ namespace MineNET
             MineNET_Registries.Init();
             new BlockInit();
             new ItemInit();
+            new EffectInit();
 
             this.Event = new EventManager();
             this.Logger = new Logger();

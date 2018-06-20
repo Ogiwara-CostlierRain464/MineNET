@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MineNET</id>
+    <version>1.0.0-beta1</version>
+    <title>MineNET-bata</title>
+    <authors>MineNETDevelopmentGroup</authors>
+    <owners>hiroki19990625</owners>
+    <licenseUrl>https://github.com/MineNETDevelopmentGroup/MineNET/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/MineNETDevelopmentGroup/MineNET</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/MineNETDevelopmentGroup/MineNET/master/MineNET.GUI/Resources/Icon/AppImage.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>MinecraftBE Server</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright MineNET 2018</copyright>
+    <tags>MinecraftBE Server</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="11.0"/>
+      <dependency id="YamlDotNet" version="4.3.1"/>
+    </dependencies>
+  </metadata>
+</package>

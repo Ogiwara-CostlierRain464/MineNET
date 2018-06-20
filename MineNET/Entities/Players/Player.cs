@@ -14,7 +14,7 @@ using System.Net;
 
 namespace MineNET.Entities.Players
 {
-    public class Player : Entity, CommandSender
+    public class Player : EntityLiving, CommandSender
     {
         #region Property & Field
         public override bool IsPlayer
@@ -46,11 +46,6 @@ namespace MineNET.Entities.Players
         protected override void EntityInit()
         {
             base.EntityInit();
-
-            this.Attributes.AddAttribute(EntityAttribute.HEALTH);
-            this.Attributes.AddAttribute(EntityAttribute.ABSORPTION);
-            this.Attributes.AddAttribute(EntityAttribute.KNOCKBACK_RESISTANCE);
-            this.Attributes.AddAttribute(EntityAttribute.MOVEMENT_SPEED);
 
             this.Attributes.AddAttribute(EntityAttribute.HUNGER);
             this.Attributes.AddAttribute(EntityAttribute.SATURATION);

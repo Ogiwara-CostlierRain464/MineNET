@@ -111,7 +111,9 @@
     <Compile Include="Data\Skin.cs" />
     <Compile Include="Entities\Attributes\EntityAttribute.cs" />
     <Compile Include="Entities\Attributes\EntityAttributeDictionary.cs" />
+    <Compile Include="Entities\Effect.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityLiving.cs" />
     <Compile Include="Entities\Metadata\EntityData.cs" />
     <Compile Include="Entities\Metadata\EntityDataByte.cs" />
     <Compile Include="Entities\Metadata\EntityDataFloat.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Events\NetworkEvents\NetworkRakNetPacketReceiveEventArgs.cs" />
     <Compile Include="Events\PlayerEvents\PlayerCreateEventArgs.cs" />
     <Compile Include="Init\BlockInit.cs" />
+    <Compile Include="Init\EffectInit.cs" />
     <Compile Include="Init\ItemInit.cs" />
     <Compile Include="IServerListInfo.cs" />
     <Compile Include="Items\Item.cs" />
@@ -164,6 +167,7 @@
     <Compile Include="Network\MinecraftPackets\LoginPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftPacket.cs" />
     <Compile Include="Network\MinecraftPackets\MinecraftProtocol.cs" />
+    <Compile Include="Network\MinecraftPackets\MobEffectPacket.cs" />
     <Compile Include="Network\MinecraftPackets\PlayStatusPacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePackClientResponsePacket.cs" />
     <Compile Include="Network\MinecraftPackets\ResourcePacksInfoPacket.cs" />
@@ -211,6 +215,7 @@
     <Compile Include="Plugins\PluginFlags.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Registry\BlockRegistry.cs" />
+    <Compile Include="Registry\EffectRegistry.cs" />
     <Compile Include="Registry\EntityRegistry.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ICancelable.cs" />
