@@ -168,6 +168,33 @@
   <data name="server.network.stop" xml:space="preserve">
     <value>ネットワークリスナーを終了しました。 終了経過時間: {0}</value>
   </data>
+  <data name="server.plugin.disable_library" xml:space="preserve">
+    <value>[{0}] ライブラリ {0} を無効にしました。</value>
+  </data>
+  <data name="server.plugin.disable_package" xml:space="preserve">
+    <value>[{0}] パッケージ {0} を無効にしました。</value>
+  </data>
+  <data name="server.plugin.disable_plugin" xml:space="preserve">
+    <value>[{0}] プラグイン {0} を無効にしました。</value>
+  </data>
+  <data name="server.plugin.enable_library" xml:space="preserve">
+    <value>[{0}] ライブラリ {0} を有効にしました。</value>
+  </data>
+  <data name="server.plugin.enable_package" xml:space="preserve">
+    <value>[{0}] パッケージ {0} を有効にしました。</value>
+  </data>
+  <data name="server.plugin.enable_plugin" xml:space="preserve">
+    <value>[{0}] プラグイン {0} を有効にしました。</value>
+  </data>
+  <data name="server.plugin.load_library" xml:space="preserve">
+    <value>[{0}] ライブラリ {0} を読み込んでいます。</value>
+  </data>
+  <data name="server.plugin.load_package" xml:space="preserve">
+    <value>[{0}] パッケージ {0} を読み込んでいます。</value>
+  </data>
+  <data name="server.plugin.load_plugin" xml:space="preserve">
+    <value>[{0}] プラグイン {0} を読み込んでいます。</value>
+  </data>
   <data name="server.start" xml:space="preserve">
     <value>MineNET サーバーを開始しています。</value>
   </data>

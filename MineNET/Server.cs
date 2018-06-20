@@ -6,6 +6,7 @@ using MineNET.Init;
 using MineNET.IO;
 using MineNET.Manager;
 using MineNET.Network;
+using MineNET.Plugins;
 using MineNET.Worlds;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ namespace MineNET
 
         public ConstantClockManager Clock { get; private set; }
 
-        public EventManager Event { get; set; }
+        public EventManager Event { get; private set; }
+        public PluginManager Plugin { get; private set; }
 
         public MineNETConfig Config { get; private set; }
         public ServerConfig ServerProperty { get; private set; }
@@ -42,7 +44,7 @@ namespace MineNET
 
         public INetworkSocket NetworkSocket { get; private set; }
         public NetworkManager Network { get; private set; }
-        public IPEndPoint EndPoint { get; set; }
+        public IPEndPoint EndPoint { get; private set; }
 
         public World MainWorld { get; private set; }
         public List<World> SubWorlds { get; } = new List<World>();
@@ -166,19 +168,19 @@ namespace MineNET
             new BlockInit();
             new ItemInit();
 
-            this.MainWorld = new World();
-
             this.Event = new EventManager();
+            this.Logger = new Logger();
+            OutLog.Info("%server.start");
+            this.Plugin = new PluginManager();
+            this.Command = new CommandManager();
+
             this.Event.Server.OnServerStart(this, new ServerStartEventArgs());
+
+            this.MainWorld = new World();
 
             this.LoadConfig();
 
-            this.Logger = new Logger();
-            this.Command = new CommandManager();
-
             this.ServerList = new ServerListInfo();
-
-            OutLog.Info("%server.start");
 
             if (this.NetworkSocket == null)
             {
@@ -259,6 +261,7 @@ namespace MineNET
             sw.Start();
 
             this.Clock?.Dispose();
+            this.Plugin?.Dispose();
             this.Command?.Dispose();
             this.Network?.Dispose();
             OutLog.Info("%server.network.stop", sw.Elapsed.ToString(@"mm\:ss\.fff"));

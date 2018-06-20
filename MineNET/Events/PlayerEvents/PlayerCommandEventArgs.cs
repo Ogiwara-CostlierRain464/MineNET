@@ -1,16 +1,17 @@
-﻿using MineNET.Entities.Players;
+﻿using MineNET.Commands;
+using MineNET.Entities.Players;
 
 namespace MineNET.Events.PlayerEvents
 {
     public class PlayerCommandEventArgs : PlayerEventArgs, ICancelable
     {
-        public string Command { get; set; }
+        public CommandData CommandData { get; set; }
         public bool IsCancel { get; set; }
 
-        public PlayerCommandEventArgs(Player player, string cmd)
+        public PlayerCommandEventArgs(CommandData command)
         {
-            this.Player = player;
-            this.Command = cmd;
+            this.Player = (Player) command.Sender;
+            this.CommandData = command;
         }
     }
 }

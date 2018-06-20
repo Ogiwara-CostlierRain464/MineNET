@@ -35,8 +35,7 @@ namespace MineNET.IO
 
         public void InputAction(string inputText)
         {
-            CommandData data = new CommandData(new ConsoleCommandSender());
-            data.Text = inputText;
+            CommandData data = new CommandData(new ConsoleCommandSender(), inputText);
             Server.Instance.Command.CommandHandler.OnCommandExecute(data);
         }
 

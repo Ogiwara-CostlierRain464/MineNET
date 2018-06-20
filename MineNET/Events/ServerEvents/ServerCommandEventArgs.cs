@@ -1,14 +1,16 @@
-﻿namespace MineNET.Events.ServerEvents
+﻿using MineNET.Commands;
+
+namespace MineNET.Events.ServerEvents
 {
     public class ServerCommandEventArgs : ServerEventArgs, ICancelable
     {
-        public string Command { get; set; }
+        public CommandData CommandData { get; }
         public bool IsCancel { get; set; }
 
-        public ServerCommandEventArgs(string command)
+        public ServerCommandEventArgs(CommandData command)
         {
             this.Server = Server.Instance;
-            this.Command = command;
+            this.CommandData = command;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§c[{this.GetInvokeThread()}/Error][{time}] {str}";
+                str = $"§c[{time}][{this.GetInvokeThread()}/Error] {str}";
 
                 this.AddOueue(str, LoggerLevel.Error);
             }
@@ -68,7 +68,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§4[{this.GetInvokeThread()}/Fatal][{time}] {str}";
+                str = $"§4[{time}][{this.GetInvokeThread()}/Fatal] {str}";
 
                 this.AddOueue(str, LoggerLevel.Fatal);
             }
@@ -101,7 +101,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§f[{this.GetInvokeThread()}/Info][{time}] {str}";
+                str = $"§f[{time}][{this.GetInvokeThread()}/Info] {str}";
 
                 this.AddOueue(str, LoggerLevel.Info);
             }
@@ -134,7 +134,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§7[{this.GetInvokeThread()}/Log][{time}] {str}";
+                str = $"§7[{time}][{this.GetInvokeThread()}/Log] {str}";
 
                 this.AddOueue(str, LoggerLevel.Log);
             }
@@ -167,7 +167,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§b[{this.GetInvokeThread()}/Notice][{time}] {str}";
+                str = $"§b[{time}][{this.GetInvokeThread()}/Notice] {str}";
 
                 this.AddOueue(str, LoggerLevel.Notice);
             }
@@ -200,7 +200,7 @@ namespace MineNET.IO
                     string key = str.Remove(0, 1);
                     str = LanguageService.GetString(key);
                 }
-                str = $"§e[{this.GetInvokeThread()}/Warning][{time}] {str}";
+                str = $"§e[{time}][{this.GetInvokeThread()}/Warning] {str}";
 
                 this.AddOueue(str, LoggerLevel.Warning);
             }

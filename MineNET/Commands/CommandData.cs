@@ -6,13 +6,14 @@ namespace MineNET.Commands
     {
         public CommandSender Sender { get; }
 
-        public string Text { get; set; }
-        public string Command { get; private set; }
-        public string[] Args { get; private set; }
+        public string Text { get; }
+        public string Command { get; set; }
+        public string[] Args { get; set; }
 
-        public CommandData(CommandSender sender)
+        public CommandData(CommandSender sender, string text)
         {
             this.Sender = sender;
+            this.Text = text;
         }
 
         public void SplitText()

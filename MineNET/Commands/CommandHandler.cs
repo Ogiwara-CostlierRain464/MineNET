@@ -1,5 +1,4 @@
-﻿using MineNET.Entities.Players;
-using MineNET.Events.PlayerEvents;
+﻿using MineNET.Events.PlayerEvents;
 using MineNET.Events.ServerEvents;
 
 namespace MineNET.Commands
@@ -15,29 +14,26 @@ namespace MineNET.Commands
 
         public void OnCommandExecute(CommandData data)
         {
+            data.SplitText();
+
             if (data.Sender.IsPlayer)
             {
-                PlayerCommandEventArgs ev = new PlayerCommandEventArgs((Player) data.Sender, data.Text);
+                PlayerCommandEventArgs ev = new PlayerCommandEventArgs(data);
                 Server.Instance.Event.Player.OnPlayerCommand(this, ev);
                 if (ev.IsCancel)
                 {
                     return;
                 }
-
-                data.Text = ev.Command;
             }
             else
             {
-                ServerCommandEventArgs ev = new ServerCommandEventArgs(data.Text);
+                ServerCommandEventArgs ev = new ServerCommandEventArgs(data);
                 Server.Instance.Event.Server.OnServerCommand(this, ev);
                 if (ev.IsCancel)
                 {
                     return;
                 }
-
-                data.Text = ev.Command;
             }
-            data.SplitText();
 
             Command command = this.Manager.GetCommand(data.Command);
             if (command != null)
