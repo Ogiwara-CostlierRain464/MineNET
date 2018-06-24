@@ -1,4 +1,5 @@
 ﻿using MineNET.Entities.Players;
+using MineNET.Events.NetworkEvents;
 using MineNET.Network.MinecraftPackets;
 using MineNET.Network.RakNetPackets;
 using MineNET.Utils;
@@ -130,6 +131,14 @@ namespace MineNET.Network
         public void HandleDataPacket(DataPacket packet)
         {
             if (packet.SeqNumber < this.WindowStart || packet.SeqNumber > this.WindowEnd || this.ACKQueue.ContainsKey(packet.SeqNumber))
+            {
+                return;
+            }
+
+            RakNetDataPacketReceiveEventArgs ev = new RakNetDataPacketReceiveEventArgs(this, packet);
+            Server.Instance.Event.Network.OnRakNetDataPacketReceive(this, ev);
+
+            if (ev.IsCancel)
             {
                 return;
             }
@@ -509,6 +518,14 @@ namespace MineNET.Network
             if (pk.SeqNumber != -1)
             {
                 //this.SendedPacket.TryAdd(pk.SeqNumber, (DataPacket) pk.Clone());
+            }
+
+            RakNetDataPacketSendEventArgs ev = new RakNetDataPacketSendEventArgs(this, pk);
+            Server.Instance.Event.Network.OnRakNetDataPacketSend(this, ev);
+
+            if (ev.IsCancel)
+            {
+                return;
             }
 
             pk.SeqNumber = this.LastSeqNumber++;

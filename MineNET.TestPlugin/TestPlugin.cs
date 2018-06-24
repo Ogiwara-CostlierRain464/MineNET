@@ -1,5 +1,4 @@
 ﻿using MineNET.Plugins;
-using System;
 
 namespace MineNET.TestPlugin
 {
@@ -21,6 +20,11 @@ namespace MineNET.TestPlugin
             }
         }
 
+        public override void OnLoad()
+        {
+            OutLog.Info("Good morning MineNET plugin!");
+        }
+
         public override void OnDisable()
         {
             OutLog.Info("Goodbye MineNET plugin!");
@@ -29,25 +33,82 @@ namespace MineNET.TestPlugin
         public override void OnEnable()
         {
             OutLog.Info("Hello MineNET plugin!");
+
+            Server.Instance.Event.IO.InputAction += IO_InputAction;
+            Server.Instance.Event.IO.OutputAction += IO_OutputAction;
+
+            Server.Instance.Event.Network.CreateSession += Network_CreateSession;
+            Server.Instance.Event.Network.RakNetDataPacketReceive += Network_RakNetDataPacketReceive;
+            Server.Instance.Event.Network.RakNetDataPacketSend += Network_RakNetDataPacketSend;
+            Server.Instance.Event.Network.RakNetPacketReceive += Network_RakNetPacketReceive;
+            Server.Instance.Event.Network.RakNetPacketSend += Network_RakNetPacketSend;
+
+            Server.Instance.Event.Player.PlayerCommand += Player_PlayerCommand;
+            Server.Instance.Event.Player.PlayerCreate += Player_PlayerCreate;
+
             Server.Instance.Event.Server.ServerCommand += Server_ServerCommand;
+            Server.Instance.Event.Server.ServerStart += Server_ServerStart;
+            Server.Instance.Event.Server.ServerStop += Server_ServerStop;
+        }
+
+        private void Server_ServerStop(object sender, Events.ServerEvents.ServerStopEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Server_ServerStart(object sender, Events.ServerEvents.ServerStartEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
         }
 
         private void Server_ServerCommand(object sender, Events.ServerEvents.ServerCommandEventArgs e)
         {
-            if (e.CommandData.Command == "test")
-            {
-                OutLog.Info("Test Command!");
-            }
+            OutLog.Notice(e.GetType().Name);
         }
 
-        public override void OnError(Exception e)
+        private void Player_PlayerCreate(object sender, Events.PlayerEvents.PlayerCreateEventArgs e)
         {
-
+            OutLog.Notice(e.GetType().Name);
         }
 
-        public override void OnLoad()
+        private void Player_PlayerCommand(object sender, Events.PlayerEvents.PlayerCommandEventArgs e)
         {
-            OutLog.Info("Good morning MineNET plugin!");
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Network_RakNetPacketSend(object sender, Events.NetworkEvents.RakNetPacketSendEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Network_RakNetPacketReceive(object sender, Events.NetworkEvents.RakNetPacketReceiveEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Network_RakNetDataPacketSend(object sender, Events.NetworkEvents.RakNetDataPacketSendEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Network_RakNetDataPacketReceive(object sender, Events.NetworkEvents.RakNetDataPacketReceiveEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void Network_CreateSession(object sender, Events.NetworkEvents.CreateSessionEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
+        }
+
+        private void IO_OutputAction(object sender, Events.IOEvents.OutputActionEventArgs e)
+        {
+            //OutLog.Notice(e.GetType().Name);
+        }
+
+        private void IO_InputAction(object sender, Events.IOEvents.InputActionEventArgs e)
+        {
+            OutLog.Notice(e.GetType().Name);
         }
     }
 }

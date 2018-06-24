@@ -262,8 +262,8 @@ namespace MineNET.Network
                 RakNetPacket pk = this.GetRakNetPacket(msgId, bytes);
                 if (pk != null)
                 {
-                    NetworkRakNetPacketReceiveEventArgs ev = new NetworkRakNetPacketReceiveEventArgs(endPoint, pk);
-                    Server.Instance.Event.Network.OnNetworkPacketReceive(this, ev);
+                    RakNetPacketReceiveEventArgs ev = new RakNetPacketReceiveEventArgs(endPoint, pk);
+                    Server.Instance.Event.Network.OnRakNetPacketReceive(this, ev);
 
                     if (ev.IsCancel)
                     {
@@ -354,8 +354,8 @@ namespace MineNET.Network
         {
             if (!this.SessionCreated(endPoint))
             {
-                NetworkCreateSessionEventArgs ev = new NetworkCreateSessionEventArgs(endPoint, new NetworkSession(endPoint, clientID, mtuSize));
-                Server.Instance.Event.Network.OnNetworkCreateSession(this, ev);
+                CreateSessionEventArgs ev = new CreateSessionEventArgs(endPoint, new NetworkSession(endPoint, clientID, mtuSize));
+                Server.Instance.Event.Network.OnCreateSession(this, ev);
 
                 if (ev.IsCancel)
                 {
@@ -462,6 +462,15 @@ namespace MineNET.Network
         public void Send(IPEndPoint point, RakNetPacket msg)
         {
             msg.Encode();
+
+            RakNetPacketSendEventArgs ev = new RakNetPacketSendEventArgs(point, msg);
+            Server.Instance.Event.Network.OnRakNetPacketSend(this, ev);
+
+            if (ev.IsCancel)
+            {
+                return;
+            }
+
             byte[] buffer = msg.ToArray();
             this.Client.Send(buffer, buffer.Length, point);
         }
