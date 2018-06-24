@@ -43,6 +43,14 @@ namespace MineNET.Entities.Players
         public bool HaveAllPacks { get; private set; }
         #endregion
 
+        #region Ctor
+        public Player() : base(null, null)
+        {
+
+        }
+        #endregion
+
+        #region Init Method
         protected override void EntityInit()
         {
             base.EntityInit();
@@ -56,6 +64,7 @@ namespace MineNET.Entities.Players
             this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_BREATHING);
             this.SetFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_CAN_CLIMB);
         }
+        #endregion
 
         #region Send Message Method
         public void SendMessage(TranslationMessage message)
